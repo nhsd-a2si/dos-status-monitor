@@ -9,8 +9,8 @@ s.auth = (config.UEC_DOS_USERNAME,
 
 
 def get_services(postcode, search_distance, number_results_per_type):
-    url = 'https://uat.pathwaysdos.nhs.uk/app/controllers/api/v1.0/services/' \
-          f'byServiceType/12345/{postcode}/{search_distance}/0/0/0/0/13,116/{number_results_per_type}'
+    url = f'{config.UEC_DOS_BASE_URL}/app/controllers/api/v1.0/services/' \
+          f'byServiceType/TEST/{postcode}/{search_distance}/0/0/0/0/{config.UEC_DOS_SERVICE_TYPES}/{number_results_per_type}'
     
     r = s.get(url)
     data = r.json()
