@@ -42,7 +42,7 @@ def has_status_changed(service_id, new_status):
 
 
 def job():
-    services = uec_dos.get_services('ME13DX', 100, 10)
+    services = uec_dos.get_services(config.UEC_DOS_POSTCODE, 100, 30)
 
     for service in services:
         print(f"{service['id']} - {service['name']} ({service['odsCode']}) - {service['capacity']['status']['human']}")
