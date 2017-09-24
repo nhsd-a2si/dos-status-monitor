@@ -55,7 +55,9 @@ def job():
                           }})
 
 
-schedule.every(1).minutes.do(job)
+schedule.every(config.CHECK_RATE_MINUTES).minutes.do(job)
+
+print(f"Check rate is every {config.CHECK_RATE_MINUTES} minutes")
 
 while True:
     print(f"Waiting... {datetime.datetime.utcnow()}")
