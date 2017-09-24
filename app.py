@@ -54,9 +54,6 @@ def job():
                           'status': service['capacity']['status']['human'],
                           }})
 
-    for record in snapshots.find():
-        print(record)
-
 
 schedule.every(1).minutes.do(job)
 
