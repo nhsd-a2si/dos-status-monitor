@@ -29,8 +29,10 @@ def has_status_changed(service_id, new_status):
                 print("Status has changed!")
                 
                 data = uec_dos.get_service_by_service_id(service_id)
+                
                 service_updated_by = data['success']['services'][0]['capacity']['updated']['by']
                 service_status = data['success']['services'][0]['capacity']['status']['human']
+                service_rag = data['success']['services'][0]['capacity']['status']['rag']
                 service_name = data['success']['services'][0]['name']
                 service_updated_date = data['success']['services'][0]['capacity']['updated']['date']
                 service_updated_time = data['success']['services'][0]['capacity']['updated']['time']
@@ -43,7 +45,9 @@ def has_status_changed(service_id, new_status):
                             'name': service_name,
                             'checkTime': datetime.datetime.utcnow(),
                             'status': service_status,
+                            'rag': service_rag,
                             'previousStatus': result['capacity']['status'],
+                            'previousRag': result['capacity']['rag'],
                             'updatedBy': service_updated_by,
                             'updatedDate': service_updated_date,
                             'updatedTime': service_updated_time
@@ -72,6 +76,7 @@ def job():
                     'checkTime': datetime.datetime.utcnow(),
                     'capacity': {
                         'status': service['capacity']['status']['human'],
+                        'rag': service['capacity']['status']['rag'],
                     }}
 
         database.add_snapshot(document)
