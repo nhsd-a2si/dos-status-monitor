@@ -35,11 +35,14 @@ UEC_DOS_USERNAME - The username to use when connecting to the DoS REST API
 UEC_DOS_PASSWORD - The password to use when connecting to the DoS REST API  
 UEC_DOS_BASE_URL - The base URL to use for the DoS REST API (e.g. https://uat.dos.nhs.uk)  
 UEC_DOS_POSTCODE - The postcode from which the search should be performed  
-UEC_DOS_SERVICE_TYPES - A list of service type codes to define the services that should be monitored (e.g. 40,45,46)    
+UEC_DOS_SERVICE_TYPES - A list of service type codes to define the services that should be monitored (e.g. 40,45,46)
+UEC_DOS_SEARCH_DISTANCE - The distance from the postcode to search within (Default: 100 miles)
+UEC_DOS_NUMBER_PER_TYPE - The number of services to return for each type in the list of service types (Default: 10)
 
 #### SMS Settings
 TWILIO_ACCOUNT_SID - The Account SID for sending SMS via Twilio    
 TWILIO_AUTH_TOKEN - The auth token for sending SMS via Twilio  
+TWILIO_FROM_NUMBER - The number from which Twilio SMS will be sent    
 MOBILE_NUMBER - The mobile number that should receive the SMS notifications  
 
 #### Email Settings (Not yet implemented)
