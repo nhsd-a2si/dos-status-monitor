@@ -34,6 +34,7 @@ def has_status_changed(service_id, new_status):
                 service_status = data['success']['services'][0]['capacity']['status']['human']
                 service_rag = data['success']['services'][0]['capacity']['status']['rag']
                 service_name = data['success']['services'][0]['name']
+                service_postcode = data['success']['services'][0]['postcode']
                 service_updated_date = data['success']['services'][0]['capacity']['updated']['date']
                 service_updated_time = data['success']['services'][0]['capacity']['updated']['time']
                 
@@ -43,6 +44,7 @@ def has_status_changed(service_id, new_status):
                 
                 document = {'id': service_id,
                             'name': service_name,
+                            'postCode': service_postcode,
                             'checkTime': datetime.datetime.utcnow(),
                             'status': service_status,
                             'rag': service_rag,
@@ -73,6 +75,8 @@ def job():
         has_status_changed(service['id'], service['capacity']['status']['human'])
         
         document = {'id': service['id'],
+                    'name': service['name'],
+                    'postCode': service['postcode'],
                     'checkTime': datetime.datetime.utcnow(),
                     'capacity': {
                         'status': service['capacity']['status']['human'],
