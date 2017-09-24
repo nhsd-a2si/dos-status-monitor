@@ -2,6 +2,9 @@ import datetime
 import uec_dos
 from database import snapshots
 import pymongo
+import schedule
+import time
+
 
 from twilio.rest import Client
 
@@ -38,17 +41,26 @@ def has_status_changed(service_id, new_status):
         print("No previous snapshot available to compare with")
 
 
-services = uec_dos.get_services('ME13DX', 100, 10)
+def job():
+    services = uec_dos.get_services('ME13DX', 100, 10)
 
-for service in services:
-    print(f"{service['id']} - {service['name']} ({service['odsCode']}) - {service['capacity']['status']['human']}")
-    has_status_changed(service['id'], service['capacity']['status']['human'])
+    for service in services:
+        print(f"{service['id']} - {service['name']} ({service['odsCode']}) - {service['capacity']['status']['human']}")
+        has_status_changed(service['id'], service['capacity']['status']['human'])
+    
+        snapshots.insert({'id': service['id'],
+                          'checkTime': datetime.datetime.utcnow(),
+                          'capacity': {
+                          'status': service['capacity']['status']['human'],
+                          }})
 
-    snapshots.insert({'id': service['id'],
-                      'checkTime': datetime.datetime.utcnow(),
-                      'capacity': {
-                      'status': service['capacity']['status']['human'],
-                      }})
+    for record in snapshots.find():
+        print(record)
 
-for record in snapshots.find():
-    print(record)
+
+schedule.every(1).minutes.do(job)
+
+while True:
+    print("Waiting...")
+    schedule.run_pending()
+    time.sleep(1)
