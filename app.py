@@ -58,6 +58,6 @@ def job():
 schedule.every(1).minutes.do(job)
 
 while True:
-    print("Waiting...")
+    print(f"Waiting... {datetime.datetime.utcnow()}")
     schedule.run_pending()
-    time.sleep(1)
+    time.sleep(30)
