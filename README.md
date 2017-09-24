@@ -25,8 +25,8 @@ The app is designed to be deployed on Heroku.
 ### Configuration
 There are a number of environment variables required:
 
-MONGODB_URI - Should contain a full MongoDB connection string e.g. `mongodb://localhost:32707/database`
-UEC_DOS_USERNAME - The username to use when connecting to the DoS REST API
-UEC_DOS_PASSWORD - The password to use when connecting to the DoS REST API
-TWILIO_ACCOUNT_SID - The Account SID for sending SMS via Twilio
-TWILIO_AUTH_TOKEN - The auth token for sending SMS via Twilio
+MONGODB_URI - Should contain a full MongoDB connection string e.g. `mongodb://localhost:32707/database`  
+UEC_DOS_USERNAME - The username to use when connecting to the DoS REST API  
+UEC_DOS_PASSWORD - The password to use when connecting to the DoS REST API  
+TWILIO_ACCOUNT_SID - The Account SID for sending SMS via Twilio  
+TWILIO_AUTH_TOKEN - The auth token for sending SMS via Twilio  
