@@ -3,6 +3,7 @@ import database
 import datetime
 from twilio.rest import Client
 import uec_dos
+import utils
 
 sms_client = Client(config.TWILIO_ACCOUNT_SID, config.TWILIO_AUTH_TOKEN)
 
@@ -37,9 +38,9 @@ def has_status_changed(service_id, new_status):
                 service_updated_time = data['success']['services'][0]['capacity']['updated']['time']
                 service_region = data['success']['services'][0]['region']['name']
                 
-                time_tup = datetime.datetime.strptime(service_updated_time, '%H:%M')
-                new_time = time_tup - datetime.timedelta(hours=1)
-                service_updated_time = datetime.datetime.strftime(new_time, '%H:%M')
+                # Fix the incorrect service_updated_time by subtracting an hour from the supplied time.
+                # TODO: Remove this fix when the API is fixed to return the correct local time
+                service_updated_time = utils.remove_1_hour_from_time_string(service_updated_time)
 
                 print(f"Status has changed for {service_id} - {service_name} - {service_status} ({service_rag})")
                 
