@@ -52,17 +52,16 @@ def has_status_changed(service_id, new_status):
                             'previousRag': result['capacity']['rag'],
                             'updatedBy': service_updated_by,
                             'updatedDate': service_updated_date,
-                            'updatedTime': service_updated_time
+                            'updatedTime': service_updated_time,
+                            'source': config.APP_NAME
                             }
             
                 database.add_change(document)
-                return
     
     else:
     
         print("No previous snapshot available to compare with")
-        return
-
+        
 
 def job():
     
@@ -81,8 +80,8 @@ def job():
                     'capacity': {
                         'status': service['capacity']['status']['human'],
                         'rag': service['capacity']['status']['rag'],
-                    }}
+                    },
+                    'source': config.APP_NAME}
 
         database.add_snapshot(document)
     
-

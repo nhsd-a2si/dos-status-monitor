@@ -1,6 +1,7 @@
 import os
 
 # Core App Settings
+APP_NAME = os.environ.get('APP_NAME', 'DEV')
 MONGODB_URI = os.environ.get('MONGODB_URI')
 CHECK_RATE_MINUTES = int(os.environ.get('CHECK_RATE_MINUTES', '5'))
 
