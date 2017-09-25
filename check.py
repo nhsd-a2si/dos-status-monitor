@@ -40,7 +40,7 @@ def has_status_changed(service_id, new_status):
                 
                 send_sms(config.MOBILE_NUMBER,
                          f"Capacity changed for {service_name} ({service_id}). \n"
-                         f"It was changed to {service_status} by {service_updated_by}.")
+                         f"It was changed to {service_status} by {service_updated_by} at {service_updated_time}.")
                 
                 document = {'id': service_id,
                             'name': service_name,
