@@ -24,6 +24,6 @@ schedule.every(config.CHECK_RATE_MINUTES).minutes.do(add_job)
 add_job()
 
 while True:
-    print(f"Ping! {datetime.datetime.utcnow()}")
+    print(f"Ping!")
     schedule.run_pending()
     time.sleep(60)
