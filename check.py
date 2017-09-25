@@ -46,6 +46,7 @@ def has_status_changed(service_id, new_status):
                 document = {'id': service_id,
                             'name': service_name,
                             'postCode': service_postcode,
+                            'region': service_region,
                             'checkTime': datetime.datetime.utcnow(),
                             'status': service_status,
                             'rag': service_rag,
