@@ -21,6 +21,8 @@ def add_job():
 
 schedule.every(config.CHECK_RATE_MINUTES).minutes.do(add_job)
 
+add_job()
+
 while True:
     print(f"Ping! {datetime.datetime.utcnow()}")
     schedule.run_pending()
