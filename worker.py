@@ -14,4 +14,4 @@ check.job()
 while True:
     print(f"Ping! {datetime.datetime.utcnow()}")
     schedule.run_pending()
-    time.sleep(30)
+    time.sleep(60)
