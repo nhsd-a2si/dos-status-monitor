@@ -4,6 +4,7 @@ import os
 APP_NAME = os.environ.get('APP_NAME', 'DEV')
 MONGODB_URI = os.environ.get('MONGODB_URI')
 CHECK_RATE_MINUTES = int(os.environ.get('CHECK_RATE_MINUTES', '5'))
+REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379')
 
 # UEC DoS Settings
 UEC_DOS_USERNAME = os.environ.get('UEC_DOS_USERNAME')

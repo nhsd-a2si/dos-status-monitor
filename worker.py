@@ -1,17 +1,13 @@
-import check
+import redis
+from rq import Worker, Queue, Connection
+
 import config
-import datetime
-import schedule
-import time
 
-print(f"Checking for types {config.UEC_DOS_SERVICE_TYPES} every {config.CHECK_RATE_MINUTES} minute(s)")
+listen = ['default']
 
+conn = redis.from_url(config.REDIS_URL)
 
-schedule.every(config.CHECK_RATE_MINUTES).minutes.do(check.job)
-
-check.job()
-
-while True:
-    print(f"Ping! {datetime.datetime.utcnow()}")
-    schedule.run_pending()
-    time.sleep(60)
+if __name__ == '__main__':
+    with Connection(conn):
+        worker = Worker(map(Queue, listen))
+        worker.work()
