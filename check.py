@@ -37,9 +37,10 @@ def has_status_changed(service_id, new_status):
                 service_postcode = data['success']['services'][0]['postcode']
                 service_updated_date = data['success']['services'][0]['capacity']['updated']['date']
                 service_updated_time = data['success']['services'][0]['capacity']['updated']['time']
+                service_region = data['success']['services'][0]['region']['name']
                 
                 send_sms(config.MOBILE_NUMBER,
-                         f"Capacity changed for {service_name} ({service_id}). \n"
+                         f"Capacity changed for {service_name} ({service_id}) in {service_region}. \n"
                          f"It was changed to {service_status} by {service_updated_by} at {service_updated_time}.")
                 
                 document = {'id': service_id,
