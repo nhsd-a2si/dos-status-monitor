@@ -53,13 +53,15 @@ def has_status_changed(service_id, new_status):
                             'postCode': service_postcode,
                             'region': service_region,
                             'checkTime': datetime.datetime.utcnow(),
-                            'status': service_status,
-                            'rag': service_rag,
-                            'previousStatus': result['capacity']['status'],
-                            'previousRag': result['capacity']['rag'],
-                            'updatedBy': service_updated_by,
-                            'updatedDate': service_updated_date,
-                            'updatedTime': service_updated_time,
+                            'capacity': {
+                                'status': service_status,
+                                'rag': service_rag,
+                                'previousStatus': result['capacity']['status'],
+                                'previousRag': result['capacity']['rag'],
+                                'updatedBy': service_updated_by,
+                                'updatedDate': service_updated_date,
+                                'updatedTime': service_updated_time
+                            },
                             'source': config.APP_NAME
                             }
             
@@ -87,4 +89,3 @@ def job():
                     'source': config.APP_NAME}
 
         database.add_snapshot(document)
-    
