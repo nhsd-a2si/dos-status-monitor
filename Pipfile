@@ -10,6 +10,7 @@ requests = "*"
 twilio = "*"
 pymongo = "*"
 schedule = "*"
+rq = "*"
 
 
 [requires]
