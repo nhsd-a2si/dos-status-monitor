@@ -26,8 +26,6 @@ def has_status_changed(service_id, new_status):
             
             if result['capacity']['status'] != new_status:
                 
-                print("Status has changed!")
-                
                 data = uec_dos.get_service_by_service_id(service_id)
                 
                 service_updated_by = data['success']['services'][0]['capacity']['updated']['by']
@@ -39,9 +37,15 @@ def has_status_changed(service_id, new_status):
                 service_updated_time = data['success']['services'][0]['capacity']['updated']['time']
                 service_region = data['success']['services'][0]['region']['name']
                 
+                time_tup = datetime.datetime.strptime(service_updated_time, '%H:%M')
+                new_time = time_tup - datetime.timedelta(hours=1)
+                service_updated_time = datetime.datetime.strftime(new_time, '%H:%M')
+
+                print(f"Status has changed for {service_id} - {service_name} - {service_status} ({service_rag})")
+                
                 send_sms(config.MOBILE_NUMBER,
-                         f"Capacity changed for {service_name} ({service_id}) in {service_region}. \n"
-                         f"It was changed to {service_status} by {service_updated_by} at {service_updated_time}.")
+                         f"{service_name} ({service_id}) in {service_region} changed to "
+                         f"{service_status} ({service_rag}) by {service_updated_by} at {service_updated_time}.")
                 
                 document = {'id': service_id,
                             'name': service_name,
@@ -59,20 +63,16 @@ def has_status_changed(service_id, new_status):
                             }
             
                 database.add_change(document)
-    
-    else:
-    
-        print("No previous snapshot available to compare with")
-        
+
 
 def job():
     
     services = uec_dos.get_services()
+    
+    print(f"Took snapshot for {len(services)} services")
 
     for service in services:
         
-        print(f"{service['id']} - {service['name']} ({service['odsCode']}) - {service['capacity']['status']['human']}")
-
         has_status_changed(service['id'], service['capacity']['status']['human'])
         
         document = {'id': service['id'],
