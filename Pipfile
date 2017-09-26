@@ -8,9 +8,9 @@ verify_ssl = true
 
 requests = "*"
 twilio = "*"
-pymongo = "*"
 schedule = "*"
 rq = "*"
+pymongo = {extras = ["tls"]}
 
 
 [requires]
