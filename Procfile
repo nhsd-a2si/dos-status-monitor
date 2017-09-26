@@ -1,2 +1,2 @@
-worker: python worker.py
-clock: python clock.py
+worker: python heroku_worker.py
+clock: python heroku_clock.py

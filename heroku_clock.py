@@ -16,6 +16,7 @@ q = Queue(connection=conn)
 
 
 def add_job():
+    print("Adding check job to queue")
     q.enqueue(check.job)
 
 
