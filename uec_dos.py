@@ -15,9 +15,14 @@ def get_services():
     
     r = s.get(url)
     data = r.json()
-    services = data['success']['services']
-    return services
-
+    if r.status_code == 200:
+        services = data['success']['services']
+        return services
+    elif r.status_code == 401:
+        raise requests.RequestException(f"Authentication Denied")
+    else:
+        raise requests.RequestException("Request failed")
+    
 
 def get_service_by_service_id(service_id):
     result = s.get(f'https://uat.pathwaysdos.nhs.uk/app/controllers/api/v1.0/services/byServiceId/{service_id}')
