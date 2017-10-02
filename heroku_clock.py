@@ -7,7 +7,7 @@ import check
 import config
 import probes
 
-print(f"Checking for types {config.UEC_DOS_SERVICE_TYPES} every {config.CHECK_RATE_MINUTES} minute(s)")
+print(f"{len(probes.get_probe_list())} probes configured to run every {config.CHECK_RATE_MINUTES} minute(s)")
 
 # Set up RQ queue
 listen = ['default']
