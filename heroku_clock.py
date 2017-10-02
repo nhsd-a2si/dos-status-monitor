@@ -5,7 +5,7 @@ from rq import Queue
 
 import check
 import config
-import datetime
+import probes
 
 print(f"Checking for types {config.UEC_DOS_SERVICE_TYPES} every {config.CHECK_RATE_MINUTES} minute(s)")
 
@@ -16,10 +16,14 @@ q = Queue(connection=conn)
 
 
 def add_job():
-    print("Adding check job to queue")
-    q.enqueue(check.job,
-              ttl=f'{config.CHECK_RATE_MINUTES}m')
-
+    probe_list = probes.get_probe_list()
+    
+    for probe in probe_list:
+        print("Adding probe to queue")
+        q.enqueue(check.job,
+                  probe,
+                  ttl=f'{config.CHECK_RATE_MINUTES}m')
+    
 
 schedule.every(config.CHECK_RATE_MINUTES).minutes.do(add_job)
 
