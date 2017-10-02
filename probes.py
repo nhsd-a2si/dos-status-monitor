@@ -4,15 +4,12 @@ import config
 def get_probe_list():
     
     probe_config = config.PROBE_LIST
-    print(probe_config)
     
     probe_list = probe_config.split('|')
-    print(probe_list)
     
     new_probe_list = []
     
     for probe_item in probe_list:
-        print(probe_item)
         probe_config_items = probe_item.split(':')
         
         probe = {
