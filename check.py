@@ -1,4 +1,5 @@
 import datetime
+import time
 
 from twilio.rest import Client
 
@@ -98,3 +99,5 @@ def job(probe):
                     'source': config.APP_NAME}
 
         database.add_snapshot(document)
+        
+        time.sleep(1)
