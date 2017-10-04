@@ -10,7 +10,6 @@ import probes
 print(f"{len(probes.get_probe_list())} probes configured to run every {config.CHECK_RATE_MINUTES} minute(s)")
 
 # Set up RQ queue
-listen = ['default']
 conn = redis.from_url(config.REDIS_URL)
 q = Queue(connection=conn)
 
