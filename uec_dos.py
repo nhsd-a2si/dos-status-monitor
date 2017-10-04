@@ -25,5 +25,5 @@ def get_services(postcode: str, search_distance: int, service_types: list, numbe
     
 
 def get_service_by_service_id(service_id: str) -> dict:
-    result = s.get(f'https://uat.pathwaysdos.nhs.uk/app/controllers/api/v1.0/services/byServiceId/{service_id}')
+    result = s.get(f'{config.UEC_DOS_BASE_URL}/app/controllers/api/v1.0/services/byServiceId/{service_id}')
     return result.json()
