@@ -3,9 +3,8 @@ import time
 import redis
 from rq import Queue
 
-import check
-import config
-import probes
+import dos_status_monitor
+from dos_status_monitor import probes, config
 
 print(f"{len(probes.get_probe_list())} probes configured to run every {config.CHECK_RATE_MINUTES} minute(s)")
 
@@ -19,7 +18,7 @@ def add_job():
     
     for probe in probe_list:
         print("Adding probe to queue")
-        q.enqueue(check.job,
+        q.enqueue(dos_status_monitor.job,
                   probe,
                   ttl=f'{config.CHECK_RATE_MINUTES}m')
     

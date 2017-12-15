@@ -17,6 +17,9 @@ TWILIO_AUTH_TOKEN = os.environ.get('TWILIO_AUTH_TOKEN')
 TWILIO_FROM_NUMBER = os.environ.get('TWILIO_FROM_NUMBER')
 MOBILE_NUMBER = os.environ.get('MOBILE_NUMBER')
 
+# Rollbar Settings
+ROLLBAR_ACCESS_TOKEN = os.environ.get('ROLLBAR_ACCESS_TOKEN', 'NONE')
+
 # Email Settings
 SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
 

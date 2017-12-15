@@ -1,7 +1,11 @@
 import redis
+# import rollbar
 from rq import Worker, Queue, Connection
 
-import config
+from dos_status_monitor import config
+
+# rollbar.init(config.ROLLBAR_ACCESS_TOKEN, config.APP_NAME)
+# access_token, environment
 
 listen = ['default']
 

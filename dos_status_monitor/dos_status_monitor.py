@@ -3,10 +3,7 @@ import time
 
 from twilio.rest import Client
 
-import config
-import database
-import uec_dos
-import utils
+from dos_status_monitor import database, utils, uec_dos, config
 
 sms_client = Client(config.TWILIO_ACCOUNT_SID, config.TWILIO_AUTH_TOKEN)
 

@@ -1,4 +1,5 @@
-import config
+from dos_status_monitor import config
+import json
 
 
 def get_probe_list():
@@ -22,3 +23,6 @@ def get_probe_list():
         new_probe_list.append(probe)
 
     return new_probe_list
+
+def get_probe_json():
+    probe_json = probe_config = json.loads(config.PROBE_JSON)

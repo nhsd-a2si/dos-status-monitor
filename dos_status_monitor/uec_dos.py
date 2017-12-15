@@ -1,4 +1,4 @@
-import config
+from dos_status_monitor import config
 import requests
 
 
