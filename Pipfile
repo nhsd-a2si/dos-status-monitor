@@ -11,6 +11,7 @@ twilio = "*"
 schedule = "*"
 rq = "*"
 pymongo = {extras = ["tls"]}
+pytest = "*"
 
 
 [requires]
