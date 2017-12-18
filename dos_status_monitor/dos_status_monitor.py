@@ -30,7 +30,13 @@ def has_status_changed(service_id, new_status):
 
             print(result)
 
-            if result['capacity']['status'] != new_status:
+            old_status = result['capacity']['status']
+
+            if old_status != new_status:
+
+                if (old_status == 'HIGH' and new_status == '') \
+                        or (old_status == '' and new_status == 'HIGH'):
+                    continue
 
                 data = uec_dos.get_service_by_service_id(service_id)
 
