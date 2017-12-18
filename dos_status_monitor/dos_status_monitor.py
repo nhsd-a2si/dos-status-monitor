@@ -36,6 +36,7 @@ def has_status_changed(service_id, new_status):
 
                 if (old_status == 'HIGH' and new_status == '') \
                         or (old_status == '' and new_status == 'HIGH'):
+                    print("Skipping change as it's just the robot")
                     continue
 
                 data = uec_dos.get_service_by_service_id(service_id)
