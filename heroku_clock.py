@@ -6,7 +6,8 @@ from rq import Queue
 import dos_status_monitor
 from dos_status_monitor import dos_status_monitor, probes, config
 
-print(f"{len(probes.get_probe_list())} probes configured to run every {config.CHECK_RATE_MINUTES} minute(s)")
+print(f"{len(probes.get_probe_list())} probes configured to run "
+      f"every {config.CHECK_RATE_MINUTES} minute(s)")
 
 # Set up RQ queue
 conn = redis.from_url(config.REDIS_URL)

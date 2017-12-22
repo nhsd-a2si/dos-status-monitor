@@ -1,11 +1,17 @@
 import datetime
 import time
+import redis
+from rq import Queue
 
 from twilio.rest import Client
 
 from dos_status_monitor import database, utils, uec_dos, config
 
 sms_client = Client(config.TWILIO_ACCOUNT_SID, config.TWILIO_AUTH_TOKEN)
+
+# Set up RQ queue
+conn = redis.from_url(config.REDIS_URL)
+q = Queue(connection=conn)
 
 
 def send_sms(to, sms_text):
@@ -21,6 +27,8 @@ def send_sms(to, sms_text):
 
 
 def has_status_changed(service_id, new_status):
+
+    time.sleep(0.75)
 
     results = database.get_snapshots_for_service(service_id)
 
@@ -102,8 +110,6 @@ def job(probe):
         if service['capacity']['status']['human']:
             print(f"{service['name']} - {service['capacity']['status']['human']}")
 
-        has_status_changed(service['id'], service['capacity']['status']['human'])
-
         document = {'id': service['id'],
                     'name': service['name'],
                     'postCode': service['postcode'],
@@ -116,4 +122,4 @@ def job(probe):
 
         database.add_snapshot(document)
 
-        time.sleep(1)
+        q.enqueue(has_status_changed, service['id'], service['capacity']['status']['human'])
