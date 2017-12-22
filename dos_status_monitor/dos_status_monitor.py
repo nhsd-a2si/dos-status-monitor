@@ -80,11 +80,16 @@ def has_status_changed(service_id, new_status):
                             'source': config.APP_NAME
                             }
 
-                print(document)
-
                 database.add_change(document)
 
+                q.enqueue(send_sms, config.MOBILE_NUMBER,
+                          f"{service_name} ({service_id}) in {service_region} changed to "
+                          f"{service_status} ({service_rag}) by {service_updated_by} at {service_updated_time}.")
+
                 print("Change added to database")
+
+            else:
+                print("Status hasn't changed")
 
 
 def job(probe):
