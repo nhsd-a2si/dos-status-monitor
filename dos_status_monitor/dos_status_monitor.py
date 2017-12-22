@@ -28,8 +28,6 @@ def send_sms(to, sms_text):
 
 def has_status_changed(service_id, new_status):
 
-    time.sleep(0.75)
-
     results = database.get_snapshots_for_service(service_id)
 
     if results.count() > 0:
@@ -47,6 +45,7 @@ def has_status_changed(service_id, new_status):
                     print("Skipping change as it's just the robot")
                     continue
 
+                time.sleep(1)
                 data = uec_dos.get_service_by_service_id(service_id)
 
                 service_updated_by = data['success']['services'][0]['capacity']['updated']['by']
@@ -63,10 +62,6 @@ def has_status_changed(service_id, new_status):
                 service_updated_time = utils.remove_1_hour_from_time_string(service_updated_time)
 
                 print(f"Status has changed for {service_id} - {service_name} - {service_status} ({service_rag})")
-
-                send_sms(config.MOBILE_NUMBER,
-                         f"{service_name} ({service_id}) in {service_region} changed to "
-                         f"{service_status} ({service_rag}) by {service_updated_by} at {service_updated_time}.")
 
                 document = {'id': service_id,
                             'name': service_name,
