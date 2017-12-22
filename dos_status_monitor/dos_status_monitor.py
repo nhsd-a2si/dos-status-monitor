@@ -98,7 +98,7 @@ def job(probe):
     print(f"Took snapshot for {len(services)} services")
 
     for service in services:
-        print(f"{service['name']}{service['capacity']['status']['human']}")
+        print(f"{service['name']} - {service['capacity']['status']['human']}")
         has_status_changed(service['id'], service['capacity']['status']['human'])
 
         document = {'id': service['id'],
