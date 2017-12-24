@@ -18,7 +18,7 @@ def add_job():
     probe_list = probes.get_probe_list()
     
     for probe in probe_list:
-        print("Adding probe to queue")
+        print("Adding job to queue")
         q.enqueue(dos_status_monitor.job,
                   probe,
                   ttl=f'{config.CHECK_RATE_MINUTES}m')

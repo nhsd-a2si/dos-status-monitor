@@ -1,6 +1,10 @@
 from dos_status_monitor import config
 from pymongo import MongoClient
 import pymongo
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 client = MongoClient(config.MONGODB_URI)
 db = client.get_database()
@@ -17,6 +21,8 @@ def add_snapshot(document):
 
 
 def get_snapshots_for_service(service_id):
+    logger.debug("Getting latest snapshot from database")
     query = {'id': service_id}
-    results = snapshots.find(query).sort([('checkTime', pymongo.DESCENDING)]).limit(1)
+    results = snapshots.find(query).sort([('checkTime',
+                                           pymongo.DESCENDING)]).skip(1).limit(1)
     return results
