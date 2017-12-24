@@ -5,6 +5,7 @@ from dos_status_monitor import config, database
 
 url = config.SLACK_WEBHOOK_URL
 slack_channel = config.SLACK_CHANNEL
+app_name = config.APP_NAME
 
 
 def send_slack_notification(service_name, region, capacity, changed_at):
@@ -19,7 +20,7 @@ def send_slack_notification(service_name, region, capacity, changed_at):
         rag_colour = 'RED'
 
     message = {
-                "username": "DoS Status Monitor",
+                "username": f"Capacity Monitor ({app_name})",
                 "channel": slack_channel,
                 "attachments": [
                    {
@@ -63,7 +64,7 @@ def send_slack_status_update():
     now = time.strftime("%H:%M")
 
     message = {
-        "username": "DoS Status Monitor",
+        "username": f"Capacity Monitor ({app_name})",
         "channel": slack_channel,
         "attachments": [
             {
