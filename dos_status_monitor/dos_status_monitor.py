@@ -172,3 +172,5 @@ def check_single_service(service_id):
         q.enqueue(has_status_changed,
                   service['id'],
                   service['capacity']['status']['human'])
+    else:
+        print("Capacity is empty so skipping status check")
