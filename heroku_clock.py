@@ -9,9 +9,6 @@ from dos_status_monitor import dos_status_monitor, probes, config, slack
 conn = redis.from_url(config.REDIS_URL)
 q = Queue(connection=conn)
 
-print(f"{len(probes.get_probe_list())} probes configured to run "
-      f"every {config.CHECK_RATE_MINUTES} minute(s)")
-
 
 def add_search_job():
     probe_list = probes.get_probe_list()
@@ -48,6 +45,11 @@ schedule.every(config.CHECK_RATE_MINUTES).minutes.do(add_search_job)
 schedule.every(config.CHECK_RATE_MINUTES).minutes.do(add_service_jobs)
 schedule.every(config.STATUS_UPDATE_RATE_MINUTES).minutes.do(add_service_status_job)
 
+print(f"{len(probes.get_probe_list())} probes configured to run "
+      f"every {config.CHECK_RATE_MINUTES} minute(s).")
+
+print("Slack Status Summary will run every "
+      f"{config.STATUS_UPDATE_RATE_MINUTES} minute(s).")
 
 while True:
     print(f"Ping!")
