@@ -19,7 +19,7 @@ def send_slack_notification(service_name, region, capacity, changed_at):
 
     message = {
                 "username": "DoS Status Monitor",
-                "channel": "#capacity_demand",
+                "channel": slack_channel,
                 "attachments": [
                    {
                         "fallback": f"{rag_colour}: {service_name}",

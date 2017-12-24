@@ -3,8 +3,10 @@ import os
 # Core App Settings
 APP_NAME = os.environ.get('APP_NAME', 'DEV')
 MONGODB_URI = os.environ.get('MONGODB_URI', 'mongodb://localhost:32771/dos_monitor')
-CHECK_RATE_MINUTES = int(os.environ.get('CHECK_RATE_MINUTES', '5'))
 REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379')
+
+CHECK_RATE_MINUTES = int(os.environ.get('CHECK_RATE_MINUTES', '5'))
+STATUS_UPDATE_RATE_MINUTES = int(os.environ.get('CHECK_RATE_MINUTES', '60'))
 
 # UEC DoS Settings
 UEC_DOS_USERNAME = os.environ.get('UEC_DOS_USERNAME')

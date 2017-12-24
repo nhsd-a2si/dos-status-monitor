@@ -37,7 +37,7 @@ def add_service_jobs():
 def add_service_status_job():
     print('Queueing Slack status update')
     q.enqueue(slack.send_slack_status_update,
-              ttl='60m')
+              ttl=f'{config.STATUS_UPDATE_RATE_MINUTES}m')
 
 
 add_search_job()
@@ -46,7 +46,7 @@ add_service_status_job()
 
 schedule.every(config.CHECK_RATE_MINUTES).minutes.do(add_search_job)
 schedule.every(config.CHECK_RATE_MINUTES).minutes.do(add_service_jobs)
-schedule.every(60).minutes.do(add_service_status_job)
+schedule.every(config.STATUS_UPDATE_RATE_MINUTES).minutes.do(add_service_status_job)
 
 
 while True:
