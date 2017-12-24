@@ -8,6 +8,7 @@ It allows a 'monitor' to be configured against DoS services, refreshing every X 
 If the capacity status of a service changes, a notification will be triggered.
 
 ## Features
+See the [Release Notes](RELEASE.md) for more details.
 
 ### Watching Services
 The tool will allow to types of watch to be configured:
