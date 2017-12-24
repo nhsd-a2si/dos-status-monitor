@@ -3,6 +3,7 @@ import json
 from dos_status_monitor import config, database
 
 url = config.SLACK_WEBHOOK_URL
+slack_channel = config.SLACK_CHANNEL
 
 
 def send_slack_notification(service_name, region, capacity, changed_at):
@@ -60,7 +61,7 @@ def send_slack_status_update():
 
     message = {
         "username": "DoS Status Monitor",
-        "channel": "@mattstibbs",
+        "channel": slack_channel,
         "attachments": [
             {
                 "fallback": "Status Update",
@@ -84,8 +85,6 @@ def send_slack_status_update():
         }
 
         fields.append(field)
-
-    print(fields)
 
     message['attachments'][0]['fields'] = fields
 
