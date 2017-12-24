@@ -4,7 +4,7 @@ import pymongo
 import logging
 
 logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('DSM')
 
 client = MongoClient(config.MONGODB_URI)
 db = client.get_database()

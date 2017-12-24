@@ -3,7 +3,7 @@ import json
 import logging
 
 logging.basicConfig()
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('DSM')
 
 
 def get_probe_list():

@@ -9,7 +9,7 @@ from twilio.rest import Client
 from dos_status_monitor import database, utils, uec_dos, config
 
 logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('DSM')
 
 sms_client = Client(config.TWILIO_ACCOUNT_SID, config.TWILIO_AUTH_TOKEN)
 
