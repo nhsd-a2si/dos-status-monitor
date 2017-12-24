@@ -25,7 +25,7 @@ def send_slack_notification(service_name, region, capacity, changed_at):
                 "attachments": [
                    {
                         "fallback": f"{rag_colour}: {service_name}",
-                        "pretext": f"{service_name} has changed to {rag_colour}",
+                        "pretext": f"*{service_name}* has changed to *{rag_colour}*",
                         "color": f"{severity}",
                         "fields": [
                            {
