@@ -8,8 +8,12 @@ logger = logging.getLogger('DSM')
 
 client = MongoClient(config.MONGODB_URI)
 db = client.get_database()
+
+# Set up collections
 snapshots = db['snapshots']
 changes = db['changes']
+statuses = db['statuses']
+watched_services = db['watched_services']
 
 
 def add_change(document):
