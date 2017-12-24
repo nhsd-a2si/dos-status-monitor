@@ -143,12 +143,12 @@ def run_search(probe):
     service_types = probe['service_types']
     number_per_type = probe['number_per_type']
 
-    print(f"Running probe for {postcode}, at {search_distance} miles, "
-          f"for {number_per_type} each of service types: {service_types}")
+    logger.info(f"Running probe for {postcode}, at {search_distance} miles, "
+                f"for {number_per_type} each of service types: {service_types}")
 
     services = uec_dos.get_services(postcode, search_distance, service_types, number_per_type)
 
-    print(f"Took snapshot for {len(services)} services")
+    logger.info(f"Took snapshot for {len(services)} services")
 
     for service in services:
 
@@ -159,23 +159,23 @@ def run_search(probe):
                       service['id'],
                       service['capacity']['status']['human'])
         else:
-            print("Capacity is empty so skipping status check")
+            logger.debug("Capacity is empty so skipping status check")
 
 
 def check_single_service(service_id):
     data = uec_dos.get_service_by_service_id(service_id)
     service = data['success']['services'][0]
     new_capacity = service['capacity']['status']['human']
-    print(service_id)
-    print(service['name'])
-    print(f'New Capacity: {new_capacity}')
+    logger.debug(service_id)
+    logger.debug(service['name'])
+    logger.debug(f'New Capacity: {new_capacity}')
 
     store_snapshot(service)
 
     if new_capacity != "":
-        print('Capacity is set, so queueing for a status check')
+        logger.debug('Capacity is set, so queueing for a status check')
         q.enqueue(has_status_changed,
                   service['id'],
                   service['capacity']['status']['human'])
     else:
-        print("Capacity is empty so skipping status check")
+        logger.debug("Capacity is empty so skipping status check")
