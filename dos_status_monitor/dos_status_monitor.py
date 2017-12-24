@@ -85,7 +85,6 @@ def has_status_changed(service_id, new_status):
                 logger.info("Skipping change as it's just the 24h robot")
                 return
 
-            time.sleep(1)
             data = uec_dos.get_service_by_service_id(service_id)
 
             service_updated_by = data['success']['services'][0]['capacity']['updated']['by']
