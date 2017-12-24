@@ -48,6 +48,20 @@ def get_service_watchlist():
     return results
 
 
+def get_service_statuses():
+    logger.debug("Getting service status list from database")
+    query = {}
+    results = statuses.find(query).sort([('capacity',
+                                          pymongo.DESCENDING)])
+    result_list = []
+
+    for result in results:
+        if result['capacity'] != '':
+            result_list.append(result)
+
+    return result_list
+
+
 def add_watched_service(service_id):
     logger.debug(f'Adding watch for service {service_id}')
     query = {'id': service_id}
