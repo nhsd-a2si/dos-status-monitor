@@ -12,6 +12,7 @@ UEC_DOS_PASSWORD = os.environ.get('UEC_DOS_PASSWORD')
 UEC_DOS_BASE_URL = os.environ.get('UEC_DOS_BASE_URL')
 
 SLACK_WEBHOOK_URL = os.environ.get('SLACK_WEBHOOK_URL')
+SLACK_CHANNEL = os.environ.get('SLACK_CHANNEL', '#random')
 
 # SMS Settings
 TWILIO_ACCOUNT_SID = os.environ.get('TWILIO_ACCOUNT_SID')
