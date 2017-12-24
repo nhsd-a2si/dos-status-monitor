@@ -24,6 +24,13 @@ def add_snapshot(document):
     snapshots.insert(document)
 
 
+def add_status(status):
+    query = {'id': status['id']}
+    update = status
+    r = statuses.update(query, update, upsert=True)
+    return r
+
+
 def get_previous_snapshot_for_service(service_id):
     # TODO: Fix so it doesn't throw an error if there's only one previous snapshot
     logger.debug("Getting latest snapshot from database")
