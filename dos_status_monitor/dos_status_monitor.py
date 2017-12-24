@@ -30,6 +30,40 @@ def send_sms(to, sms_text):
     logger.debug(message.sid)
 
 
+def store_snapshot(service):
+    if service['capacity']['status']['human']:
+        print(f"{service['name']} - {service['capacity']['status']['human']}")
+
+    snapshot = {
+        'id': service['id'],
+        'name': service['name'],
+        'type': service['type']['name'],
+        'postCode': service['postcode'],
+        'checkTime': datetime.datetime.utcnow(),
+        'capacity': {
+            'status': service['capacity']['status']['human'],
+            'rag': service['capacity']['status']['rag'],
+        },
+        'source': config.APP_NAME
+    }
+
+    database.add_snapshot(snapshot)
+
+    status = {
+        'id': service['id'],
+        'name': service['name'],
+        'type': service['type']['name'],
+        'postCode': service['postcode'],
+        'checkTime': datetime.datetime.utcnow(),
+        'capacity': service['capacity']['status']['human'],
+        'rag': service['capacity']['status']['rag'],
+        'source': config.APP_NAME
+    }
+
+    r = database.add_status(status)
+    logger.debug(r)
+
+
 def has_status_changed(service_id, new_status):
     logger.debug(f'Service ID: {service_id}')
     logger.debug(f'Latest Status: {new_status}')
@@ -113,19 +147,21 @@ def job(probe):
 
     for service in services:
 
-        if service['capacity']['status']['human']:
-            print(f"{service['name']} - {service['capacity']['status']['human']}")
+        store_snapshot(service)
+        q.enqueue(has_status_changed,
+                  service['id'],
+                  service['capacity']['status']['human'])
 
-        document = {'id': service['id'],
-                    'name': service['name'],
-                    'postCode': service['postcode'],
-                    'checkTime': datetime.datetime.utcnow(),
-                    'capacity': {
-                        'status': service['capacity']['status']['human'],
-                        'rag': service['capacity']['status']['rag'],
-                    },
-                    'source': config.APP_NAME}
 
-        database.add_snapshot(document)
+def check_single_service(service_id):
+    data = uec_dos.get_service_by_service_id(service_id)
+    service = data['success']['services'][0]
+    new_capacity = service['capacity']['status']['human']
+    print(service_id)
+    print(service['name'])
+    print(new_capacity)
 
-        q.enqueue(has_status_changed, service['id'], service['capacity']['status']['human'])
+    store_snapshot(service)
+    q.enqueue(has_status_changed,
+              service['id'],
+              service['capacity']['status']['human'])
