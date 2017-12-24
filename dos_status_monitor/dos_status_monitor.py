@@ -131,7 +131,7 @@ def has_status_changed(service_id, new_status):
             logger.debug("Status hasn't changed")
 
 
-def job(probe):
+def run_search(probe):
     postcode = probe['postcode']
     search_distance = probe['search_distance']
     service_types = probe['service_types']
