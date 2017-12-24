@@ -6,7 +6,7 @@ from rq import Queue
 
 from twilio.rest import Client
 
-from dos_status_monitor import database, utils, uec_dos, config
+from dos_status_monitor import database, uec_dos, config, slack
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger('DSM')
@@ -129,6 +129,12 @@ def has_status_changed(service_id, new_status):
             q.enqueue(send_sms, config.MOBILE_NUMBER,
                       f"{service_name} ({service_id}) in {service_region} changed to "
                       f"{service_status} ({service_rag}) by {service_updated_by} at {service_updated_time}.")
+
+            q.enqueue(slack.send_slack_notification,
+                      service_name,
+                      service_region,
+                      service_status,
+                      service_updated_time)
 
             logger.debug("Change added to database")
 
