@@ -64,7 +64,8 @@ def send_slack_status_update():
         "attachments": [
             {
                 "fallback": "Status Update",
-                "pretext": "The following services are under pressure currently"
+                "pretext": "The following services are under pressure currently. "
+                           "A status of NONE means they are not returning in DoS searches."
             }
         ]
     }
