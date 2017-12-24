@@ -68,8 +68,11 @@ def has_status_changed(service_id, new_status):
     logger.debug(f'Service ID: {service_id}')
     logger.debug(f'Latest Status: {new_status}')
     results = database.get_previous_snapshot_for_service(service_id)
-    result = results[0]
-    logger.debug(f'Result: {result}')
+    if results.count() > 0:
+        result = results[0]
+        logger.debug(f'Result: {result}')
+    else:
+        result = None
 
     if result:
 
@@ -163,6 +166,7 @@ def check_single_service(service_id):
     print(new_capacity)
 
     store_snapshot(service)
+
     q.enqueue(has_status_changed,
               service['id'],
               service['capacity']['status']['human'])
