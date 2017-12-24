@@ -3,7 +3,7 @@ import time
 import redis
 from rq import Queue
 
-from dos_status_monitor import dos_status_monitor, probes, config
+from dos_status_monitor import dos_status_monitor, probes, config, slack
 
 # Set up RQ queue
 conn = redis.from_url(config.REDIS_URL)
@@ -34,11 +34,19 @@ def add_service_jobs():
                   ttl=f'{config.CHECK_RATE_MINUTES}m')
 
 
+def add_service_status_job():
+    print('Queueing Slack status update')
+    q.enqueue(slack.send_slack_status_update,
+              ttl='60m')
+
+
 add_search_job()
 add_service_jobs()
+add_service_status_job()
 
 schedule.every(config.CHECK_RATE_MINUTES).minutes.do(add_search_job)
 schedule.every(config.CHECK_RATE_MINUTES).minutes.do(add_service_jobs)
+schedule.every(60).minutes.do(add_service_status_job)
 
 
 while True:
