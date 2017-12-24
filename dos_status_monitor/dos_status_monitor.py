@@ -99,7 +99,7 @@ def has_status_changed(service_id, new_status):
 
             # Fix the incorrect service_updated_time by subtracting an hour from the supplied time.
             # TODO: Remove this fix when the API is fixed to return the correct local time
-            service_updated_time = utils.remove_1_hour_from_time_string(service_updated_time)
+            # service_updated_time = utils.remove_1_hour_from_time_string(service_updated_time)
 
             logger.info(f"Status has changed for {service_id} - {service_name} - {service_status} ({service_rag})")
 
