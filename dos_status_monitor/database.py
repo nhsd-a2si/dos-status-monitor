@@ -56,7 +56,7 @@ def get_service_statuses():
     result_list = []
 
     for result in results:
-        if result['capacity'] != '':
+        if result['capacity'] not in ('', 'HIGH'):
             result_list.append(result)
 
     return result_list
