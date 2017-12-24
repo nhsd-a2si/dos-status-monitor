@@ -7,7 +7,7 @@ url = config.SLACK_WEBHOOK_URL
 
 def send_slack_notification(service_name, region, capacity, changed_at):
     if capacity == 'HIGH':
-        severity = 'ok'
+        severity = 'good'
         rag_colour = 'GREEN'
     elif capacity == 'LOW':
         severity = 'warning'
