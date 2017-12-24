@@ -24,7 +24,8 @@ def add_snapshot(document):
     snapshots.insert(document)
 
 
-def get_snapshots_for_service(service_id):
+def get_previous_snapshot_for_service(service_id):
+    # TODO: Fix so it doesn't throw an error if there's only one previous snapshot
     logger.debug("Getting latest snapshot from database")
     query = {'id': service_id}
     results = snapshots.find(query).sort([('checkTime',
