@@ -163,10 +163,12 @@ def check_single_service(service_id):
     new_capacity = service['capacity']['status']['human']
     print(service_id)
     print(service['name'])
-    print(new_capacity)
+    print(f'New Capacity: {new_capacity}')
 
     store_snapshot(service)
 
-    q.enqueue(has_status_changed,
-              service['id'],
-              service['capacity']['status']['human'])
+    if new_capacity != "":
+        print('Capacity is set, so queueing for a status check')
+        q.enqueue(has_status_changed,
+                  service['id'],
+                  service['capacity']['status']['human'])
