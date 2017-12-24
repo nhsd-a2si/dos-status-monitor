@@ -1,5 +1,6 @@
 import requests
 import json
+import time
 from dos_status_monitor import config, database
 
 url = config.SLACK_WEBHOOK_URL
@@ -59,14 +60,16 @@ def send_slack_status_update():
 
     service_list = database.get_service_statuses()
 
+    now = time.strftime("%H:%M")
+
     message = {
         "username": "DoS Status Monitor",
         "channel": slack_channel,
         "attachments": [
             {
-                "fallback": "Status Update",
-                "pretext": "The following services are under pressure currently. "
-                           "A status of NONE means they are not returning in DoS searches."
+                "fallback": "Capacity Status Summary",
+                "pretext": f"At {now}, these services are currently indicating low capacity  "
+                           "(status of NONE means they are not returning in DoS searches)."
             }
         ]
     }
