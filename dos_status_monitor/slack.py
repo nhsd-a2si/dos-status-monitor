@@ -68,7 +68,7 @@ def send_slack_status_update():
         "attachments": [
             {
                 "fallback": "Capacity Status Summary",
-                "pretext": f"At {now}, these services are currently indicating low capacity  "
+                "pretext": f"At {now}, these services are indicating low capacity  "
                            "(status of NONE means they are not returning in DoS searches)."
             }
         ]
