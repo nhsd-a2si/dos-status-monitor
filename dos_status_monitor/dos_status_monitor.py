@@ -95,6 +95,7 @@ def has_status_changed(service_id, new_status):
             service_updated_date = data['success']['services'][0]['capacity']['updated']['date']
             service_updated_time = data['success']['services'][0]['capacity']['updated']['time']
             service_region = data['success']['services'][0]['region']['name']
+            service_type = data['success']['services'][0]['type']['name']
 
             # Fix the incorrect service_updated_time by subtracting an hour from the supplied time.
             # TODO: Remove this fix when the API is fixed to return the correct local time
@@ -104,6 +105,7 @@ def has_status_changed(service_id, new_status):
 
             document = {'id': service_id,
                         'name': service_name,
+                        'type': service_type,
                         'postCode': service_postcode,
                         'region': service_region,
                         'checkTime': datetime.datetime.utcnow(),
