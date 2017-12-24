@@ -25,9 +25,6 @@ MOBILE_NUMBER = os.environ.get('MOBILE_NUMBER')
 # Rollbar Settings
 ROLLBAR_ACCESS_TOKEN = os.environ.get('ROLLBAR_ACCESS_TOKEN', 'NONE')
 
-# Email Settings
-SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
-
 # Probes should be defined as a list in format
 # "POSTCODE:DISTANCE:TYPES:NUMBER|POSTCODE:DIST:TYPES:NUMBER"
 PROBE_LIST = os.environ.get('PROBE_LIST')
