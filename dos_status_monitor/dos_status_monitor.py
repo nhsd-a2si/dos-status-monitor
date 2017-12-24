@@ -67,7 +67,7 @@ def store_snapshot(service):
 def has_status_changed(service_id, new_status):
     logger.debug(f'Service ID: {service_id}')
     logger.debug(f'Latest Status: {new_status}')
-    results = database.get_snapshots_for_service(service_id)
+    results = database.get_previous_snapshot_for_service(service_id)
     result = results[0]
     logger.debug(f'Result: {result}')
 
