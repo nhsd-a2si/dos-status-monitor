@@ -30,19 +30,23 @@ def send_slack_notification(service_name, region, capacity, changed_at):
                         "fields": [
                            {
                                "title": "Region",
-                               "value": f"{region}"
+                               "value": f"{region}",
+                               "short": True
                            },
                            {
-                              "title": "Status",
-                              "value": f"{rag_colour}"
+                               "title": "Status",
+                               "value": f"{rag_colour}",
+                               "short": True
                            },
                            {
                                "title": "Capacity",
-                               "value": f"{capacity}"
+                               "value": f"{capacity}",
+                               "short": True
                            },
                            {
-                              "title": "Changed At",
-                              "value": f"{changed_at}"
+                               "title": "Changed At",
+                               "value": f"{changed_at}",
+                               "short": True
                            }
                         ]
                    }
