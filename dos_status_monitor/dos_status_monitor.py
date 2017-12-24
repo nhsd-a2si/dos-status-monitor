@@ -152,9 +152,13 @@ def run_search(probe):
     for service in services:
 
         store_snapshot(service)
-        q.enqueue(has_status_changed,
-                  service['id'],
-                  service['capacity']['status']['human'])
+
+        if service['capacity']['status']['human'] != "":
+            q.enqueue(has_status_changed,
+                      service['id'],
+                      service['capacity']['status']['human'])
+        else:
+            print("Capacity is empty so skipping status check")
 
 
 def check_single_service(service_id):
