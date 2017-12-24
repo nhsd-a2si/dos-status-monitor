@@ -1,9 +1,4 @@
-from dos_status_monitor import config, database
-import json
-import logging
-
-logging.basicConfig()
-logger = logging.getLogger('DSM')
+from dos_status_monitor import config, database, logger
 
 
 def get_probe_list():
@@ -27,10 +22,6 @@ def get_probe_list():
         new_probe_list.append(probe)
 
     return new_probe_list
-
-
-def get_probe_json():
-    probe_json = probe_config = json.loads(config.PROBE_JSON)
 
 
 def get_watched_service_list():

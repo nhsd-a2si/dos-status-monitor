@@ -1,10 +1,8 @@
 from dos_status_monitor import config
 from pymongo import MongoClient
 import pymongo
-import logging
 
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger('DSM')
+from dos_status_monitor import logger
 
 client = MongoClient(config.MONGODB_URI)
 db = client.get_database()
@@ -46,6 +44,20 @@ def get_service_watchlist():
     results = watched_services.find(query).sort([('id',
                                                   pymongo.DESCENDING)])
     return results
+
+
+def get_service_statuses():
+    logger.debug("Getting service status list from database")
+    query = {}
+    results = statuses.find(query).sort([('capacity',
+                                          pymongo.DESCENDING)])
+    result_list = []
+
+    for result in results:
+        if result['capacity'] not in ('', 'HIGH'):
+            result_list.append(result)
+
+    return result_list
 
 
 def add_watched_service(service_id):
