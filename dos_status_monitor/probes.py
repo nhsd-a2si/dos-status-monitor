@@ -1,4 +1,4 @@
-from dos_status_monitor import config
+from dos_status_monitor import config, database
 import json
 import logging
 
@@ -31,3 +31,11 @@ def get_probe_list():
 
 def get_probe_json():
     probe_json = probe_config = json.loads(config.PROBE_JSON)
+
+
+def get_watched_service_list():
+    service_list = database.get_service_watchlist()
+    logger.debug(service_list)
+    return service_list
+
+
