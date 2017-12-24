@@ -1,10 +1,8 @@
 from dos_status_monitor import config
 from pymongo import MongoClient
 import pymongo
-import logging
 
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger('DSM')
+from dos_status_monitor import logger
 
 client = MongoClient(config.MONGODB_URI)
 db = client.get_database()

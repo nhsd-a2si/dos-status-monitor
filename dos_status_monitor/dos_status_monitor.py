@@ -1,15 +1,10 @@
 import datetime
-import logging
-import time
 import redis
 from rq import Queue
 
 from twilio.rest import Client
 
-from dos_status_monitor import database, uec_dos, config, slack
-
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger('DSM')
+from dos_status_monitor import database, uec_dos, config, slack, logger
 
 sms_client = Client(config.TWILIO_ACCOUNT_SID, config.TWILIO_AUTH_TOKEN)
 

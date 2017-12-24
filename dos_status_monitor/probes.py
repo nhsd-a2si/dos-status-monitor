@@ -1,8 +1,4 @@
-from dos_status_monitor import config, database
-import logging
-
-logging.basicConfig()
-logger = logging.getLogger('DSM')
+from dos_status_monitor import config, database, logger
 
 
 def get_probe_list():
