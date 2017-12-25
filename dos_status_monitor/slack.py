@@ -7,6 +7,12 @@ url = config.SLACK_WEBHOOK_URL
 slack_channel = config.SLACK_CHANNEL
 app_name = config.APP_NAME
 
+emojis = {
+    'HIGH': ':green_heart:',
+    'LOW': ':large_orange_diamond:',
+    'NONE': ':red_circle:'
+}
+
 
 def send_slack_notification(service_name, region,
                             capacity, old_status,
@@ -106,8 +112,7 @@ def send_slack_status_update():
 
         field = {
             "title": name,
-            "value": capacity,
-            "short": True
+            "value": f"{emojis[capacity]}{capacity}"
         }
 
         fields.append(field)
