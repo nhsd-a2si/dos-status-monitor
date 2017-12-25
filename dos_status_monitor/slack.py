@@ -112,7 +112,8 @@ def send_slack_status_update():
 
         field = {
             "title": name,
-            "value": f"{emojis[capacity]}{capacity}"
+            "value": f"{emojis[capacity]}{capacity}",
+            "short": True
         }
 
         fields.append(field)
