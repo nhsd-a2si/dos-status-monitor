@@ -8,46 +8,64 @@ slack_channel = config.SLACK_CHANNEL
 app_name = config.APP_NAME
 
 
-def send_slack_notification(service_name, region, capacity, changed_at):
+def send_slack_notification(service_name, region,
+                            capacity, old_status,
+                            service_type, changed_at):
     if capacity == 'HIGH':
         severity = 'good'
         rag_colour = 'GREEN'
+        emoji = ':green_heart:'
     elif capacity == 'LOW':
         severity = 'warning'
         rag_colour = 'AMBER'
+        emoji = ':large_orange_diamond:'
     elif capacity == 'NONE':
         severity = 'danger'
         rag_colour = 'RED'
+        emoji = ':red_circle:'
+
+    if old_status == 'HIGH':
+        old_severity = 'good'
+        old_rag_colour = 'GREEN'
+        old_emoji = ':green_heart:'
+    elif old_status == 'LOW':
+        old_severity = 'warning'
+        old_rag_colour = 'AMBER'
+        old_emoji = ':large_orange_diamond:'
+    elif old_status == 'NONE':
+        old_severity = 'danger'
+        old_rag_colour = 'RED'
+        old_emoji = ':red_circle:'
 
     message = {
                 "username": f"Capacity Monitor ({app_name})",
                 "channel": slack_channel,
                 "attachments": [
                    {
-                        "fallback": f"{rag_colour}: {service_name}",
-                        "pretext": f"*{service_name}* has changed to *{rag_colour}*",
+                        "fallback": f"{service_name} has changed to {capacity} - {rag_colour}",
+                        "pretext": f"{service_name} has changed to {emoji} {capacity}",
                         "color": f"{severity}",
                         "fields": [
-                           {
-                               "title": "Region",
-                               "value": f"{region}",
-                               "short": True
-                           },
-                           {
-                               "title": "Status",
-                               "value": f"{rag_colour}",
-                               "short": True
-                           },
-                           {
-                               "title": "Capacity",
-                               "value": f"{capacity}",
-                               "short": True
-                           },
-                           {
-                               "title": "Changed At",
-                               "value": f"{changed_at}",
-                               "short": True
-                           }
+                            {
+                                "title": f"Previously",
+                                "value": f"{old_status}",
+                                "short": True
+                            },
+                            {
+                                "title": ":world_map:",
+                                "value": f"{region}",
+                                "short": True
+                            },
+                            {
+                                "title": ":mantelpiece_clock:",
+                                "value": f"{changed_at}",
+                                "short": True
+                            },
+                            {
+                                "title": ":hospital:",
+                                "value": f"{service_type}",
+                                "short": True
+                            }
                         ]
                    }
                 ]

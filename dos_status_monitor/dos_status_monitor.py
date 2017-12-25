@@ -129,6 +129,8 @@ def has_status_changed(service_id, new_status):
                       service_name,
                       service_region,
                       service_status,
+                      old_status,
+                      service_type,
                       service_updated_time)
 
             logger.debug("Change added to database")
