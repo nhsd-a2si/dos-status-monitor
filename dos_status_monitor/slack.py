@@ -58,17 +58,17 @@ def send_slack_notification(service_name, region,
                                 "short": True
                             },
                             {
-                                "title": ":world_map:",
+                                "title": "Region",
                                 "value": f"{region}",
                                 "short": True
                             },
                             {
-                                "title": ":mantelpiece_clock:",
+                                "title": "Changed At",
                                 "value": f"{changed_at}",
                                 "short": True
                             },
                             {
-                                "title": ":hospital:",
+                                "title": "Type Of Service",
                                 "value": f"{service_type}",
                                 "short": True
                             }
