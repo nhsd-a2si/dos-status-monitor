@@ -1,5 +1,5 @@
 import pytest
-from dos_status_monitor import utils
+from dos_status_monitor.config import config_string_to_bool
 
 test_strings = [('true', True),
                 ('TRUE', True),
@@ -21,5 +21,5 @@ test_strings = [('true', True),
 @pytest.mark.parametrize("test_data", test_strings)
 def test_config_string_converts_to_bool_correctly(test_data):
 
-    result = utils.config_string_to_bool(test_data[0])
+    result = config_string_to_bool(test_data[0])
     assert result is test_data[1]

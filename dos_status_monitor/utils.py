@@ -1,5 +1,4 @@
 import datetime
-import os
 
 
 def remove_1_hour_from_time_string(current_time: str) -> str:
@@ -12,9 +11,3 @@ def remove_1_hour_from_time_string(current_time: str) -> str:
     new_time = time_tup - datetime.timedelta(hours=1)
     return datetime.datetime.strftime(new_time, '%H:%M')
 
-
-def config_string_to_bool(setting):
-    if setting.lower() in ('true', 'yes', 'on'):
-        return True
-    else:
-        return False

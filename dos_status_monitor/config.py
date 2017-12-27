@@ -1,5 +1,12 @@
 import os
-from .utils import config_string_to_bool
+
+
+def config_string_to_bool(setting):
+    if setting.lower() in ('true', 'yes', 'on'):
+        return True
+    else:
+        return False
+
 
 # Core App Settings
 APP_NAME = os.environ.get('APP_NAME', 'DEV')
@@ -20,6 +27,7 @@ UEC_DOS_BASE_URL = os.environ.get('UEC_DOS_BASE_URL')
 # Slack Notification Settings
 SLACK_WEBHOOK_URL = os.environ.get('SLACK_WEBHOOK_URL')
 SLACK_CHANNEL = os.environ.get('SLACK_CHANNEL', '#random')
+SLACK_ENABLED = config_string_to_bool(os.environ.get('SLACK_ENABLED', ''))
 
 # SMS Notification Settings
 TWILIO_ACCOUNT_SID = os.environ.get('TWILIO_ACCOUNT_SID')
