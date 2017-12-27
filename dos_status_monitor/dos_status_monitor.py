@@ -2,27 +2,11 @@ import datetime
 import redis
 from rq import Queue
 
-from twilio.rest import Client
-
-from dos_status_monitor import database, uec_dos, config, slack, logger
-
-sms_client = Client(config.TWILIO_ACCOUNT_SID, config.TWILIO_AUTH_TOKEN)
+from dos_status_monitor import database, uec_dos, config, slack, logger, sms
 
 # Set up RQ queue
 conn = redis.from_url(config.REDIS_URL)
 q = Queue(connection=conn)
-
-
-def send_sms(to, sms_text):
-
-    logger.info("Sending SMS")
-
-    message = sms_client.messages.create(
-        to,
-        body=sms_text,
-        from_=config.TWILIO_FROM_NUMBER)
-
-    logger.debug(message.sid)
 
 
 def store_snapshot(service):
@@ -120,23 +104,25 @@ def has_status_changed(service_id, new_status):
                         }
 
             database.add_change(document)
-
-            # q.enqueue(send_sms, config.MOBILE_NUMBER,
-            #          f"{service_name} ({service_id}) in {service_region} changed to "
-            #          f"{service_status} ({service_rag}) by {service_updated_by} at {service_updated_time}.")
-
-            q.enqueue(slack.send_slack_notification,
-                      service_name,
-                      service_region,
-                      service_status,
-                      old_status,
-                      service_type,
-                      service_updated_time)
-
             logger.debug("Change added to database")
 
+            if config.SMS_ENABLED:
+                q.enqueue(sms.send_sms, config.MOBILE_NUMBER,
+                          f"{service_name} ({service_id}) in {service_region} "
+                          f"changed to {service_status} ({service_rag}) by "
+                          f"{service_updated_by} at {service_updated_time}.")
+
+            if config.SLACK_ENABLED:
+                q.enqueue(slack.send_slack_notification,
+                          service_name,
+                          service_region,
+                          service_status,
+                          old_status,
+                          service_type,
+                          service_updated_time)
+
         else:
-            logger.debug("Status hasn't changed")
+            logger.debug(f"Status for {service_id} hasn't changed")
 
 
 def run_search(probe):
