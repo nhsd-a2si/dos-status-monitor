@@ -1,7 +1,7 @@
 import requests
 import json
 import time
-from dos_status_monitor import config, database
+from dos_status_monitor import config, database, logger
 
 url = config.SLACK_WEBHOOK_URL
 slack_channel = config.SLACK_CHANNEL
@@ -17,6 +17,10 @@ emojis = {
 def send_slack_notification(service_name, region,
                             capacity, old_status,
                             service_type, changed_at):
+
+    logger.info(f'Sending Slack notification to '
+                f'{config.SLACK_CHANNEL}')
+
     if capacity == 'HIGH':
         severity = 'good'
         rag_colour = 'GREEN'
@@ -29,19 +33,6 @@ def send_slack_notification(service_name, region,
         severity = 'danger'
         rag_colour = 'RED'
         emoji = ':red_circle:'
-
-    if old_status == 'HIGH':
-        old_severity = 'good'
-        old_rag_colour = 'GREEN'
-        old_emoji = ':green_heart:'
-    elif old_status == 'LOW':
-        old_severity = 'warning'
-        old_rag_colour = 'AMBER'
-        old_emoji = ':large_orange_diamond:'
-    elif old_status == 'NONE':
-        old_severity = 'danger'
-        old_rag_colour = 'RED'
-        old_emoji = ':red_circle:'
 
     message = {
                 "username": f"Capacity Monitor ({app_name})",
