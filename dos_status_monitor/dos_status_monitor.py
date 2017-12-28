@@ -119,7 +119,8 @@ def has_status_changed(service_id, new_status):
                           service_status,
                           old_status,
                           service_type,
-                          service_updated_time)
+                          service_updated_time,
+                          service_updated_by)
 
         else:
             logger.debug(f"Status for {service_id} hasn't changed")

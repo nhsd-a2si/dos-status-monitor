@@ -16,7 +16,8 @@ emojis = {
 
 def send_slack_notification(service_name, region,
                             capacity, old_status,
-                            service_type, changed_at):
+                            service_type, changed_at, 
+                            changed_by):
 
     logger.info(f'Sending Slack notification to '
                 f'{config.SLACK_CHANNEL}')
@@ -33,14 +34,19 @@ def send_slack_notification(service_name, region,
         severity = 'danger'
         rag_colour = 'RED'
         emoji = ':red_circle:'
+        
+    if changed_by == 'ROBOT':
+        description = f"{service_name} was reset to {emoji} {capacity} automatically :robot_face:"
+    else:
+        description = f"{service_name} has changed to {emoji} {capacity}"
 
     message = {
                 "username": f"Capacity Monitor ({app_name})",
                 "channel": slack_channel,
                 "attachments": [
                    {
-                        "fallback": f"{service_name} has changed to {capacity} - {rag_colour}",
-                        "pretext": f"{service_name} has changed to {emoji} {capacity}",
+                        "fallback": description,
+                        "pretext": description,
                         "color": f"{severity}",
                         "fields": [
                             {
