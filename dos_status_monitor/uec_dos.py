@@ -8,11 +8,16 @@ s.auth = (config.UEC_DOS_USERNAME,
           config.UEC_DOS_PASSWORD)
 
 
-def get_services(postcode: str, search_distance: int, service_types: list, number_per_type: int) -> dict:
+def get_services_by_service_search(postcode: str,
+                                   search_distance: int,
+                                   service_types: list,
+                                   number_per_type: int) -> dict:
+
     time.sleep(0.5)
-    url = f'{config.UEC_DOS_BASE_URL}/app/controllers/api/v1.0/services/' \
-          f'byServiceType/CAPMON/{postcode}/{search_distance}/0/0/0/0/' \
-          f'{service_types}/{number_per_type}'
+
+    url = f'{config.UEC_DOS_BASE_URL}/app/controllers/api/v1.0/' \
+          f'services/byServiceType/CAPMON/{postcode}/{search_distance}/' \
+          f'0/0/0/0/{service_types}/{number_per_type}'
     
     r = s.get(url)
     data = r.json()
@@ -27,6 +32,7 @@ def get_services(postcode: str, search_distance: int, service_types: list, numbe
 
 def get_service_by_service_id(service_id: str) -> dict:
     time.sleep(1)
-    result = s.get(f'{config.UEC_DOS_BASE_URL}/app/controllers/api/v1.0/services/'
-                   f'byServiceId/{service_id}')
+    url = f'{config.UEC_DOS_BASE_URL}/app/controllers/api/v1.0/' \
+          f'services/byServiceId/{service_id}'
+    result = s.get(url)
     return result.json()

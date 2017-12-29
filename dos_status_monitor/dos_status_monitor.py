@@ -128,7 +128,7 @@ def has_status_changed(service_id, new_status):
             logger.debug(f"Status for {service_id} hasn't changed")
 
 
-def run_search(probe):
+def run_service_search(probe):
     postcode = probe['postcode']
     search_distance = probe['search_distance']
     service_types = probe['service_types']
@@ -137,7 +137,7 @@ def run_search(probe):
     logger.info(f"Running probe for {postcode}, at {search_distance} miles, "
                 f"for {number_per_type} each of service types: {service_types}")
 
-    services = uec_dos.get_services(postcode, search_distance, service_types, number_per_type)
+    services = uec_dos.get_services_by_service_search(postcode, search_distance, service_types, number_per_type)
 
     logger.info(f"Took snapshot for {len(services)} services")
 
