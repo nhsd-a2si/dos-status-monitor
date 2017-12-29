@@ -10,6 +10,10 @@ def get_probe_list():
     new_probe_list = []
     
     for probe_item in probe_list:
+        if probe_item == '':
+            print("No valid config - skipping")
+            continue
+
         probe_config_items = probe_item.split(':')
         
         probe = {
