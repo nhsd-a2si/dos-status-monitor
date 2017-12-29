@@ -155,20 +155,24 @@ def run_service_search(probe):
 
 def check_single_service(service_id):
     data = uec_dos.get_service_by_service_id(service_id)
-    service = data['success']['services'][0]
-    new_capacity = service['capacity']['status']['human']
-    logger.debug(service_id)
-    logger.debug(service['name'])
-    logger.debug(f'New Capacity: {new_capacity}')
+    try:
+        service = data['success']['services'][0]
+        new_capacity = service['capacity']['status']['human']
+        logger.debug(service_id)
+        logger.debug(service['name'])
+        logger.debug(f'New Capacity: {new_capacity}')
 
-    store_snapshot(service)
+        store_snapshot(service)
 
-    if new_capacity != "":
-        logger.debug('Capacity is not empty, '
-                     'so queueing a status check for this service.')
-        q.enqueue(has_status_changed,
-                  service['id'],
-                  service['capacity']['status']['human'],
-                  at_front=True)
-    else:
-        logger.debug("Capacity is empty so skipping status check")
+        if new_capacity != "":
+            logger.debug('Capacity is not empty, '
+                         'so queueing a status check for this service.')
+            q.enqueue(has_status_changed,
+                      service['id'],
+                      service['capacity']['status']['human'],
+                      at_front=True)
+        else:
+            logger.debug("Capacity is empty so skipping status check")
+
+    except IndexError:
+        logger.exception('Service not found')
