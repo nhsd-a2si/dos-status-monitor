@@ -36,7 +36,7 @@ def send_slack_notification(service_name, region,
         emoji = ':red_circle:'
         
     if changed_by == 'ROBOT':
-        description = f"{service_name} was reset to {emoji} {capacity} automatically :robot_face:"
+        description = f"{service_name} was reset to {emoji} {capacity} by :robot_face:"
     else:
         description = f"{service_name} has changed to {emoji} {capacity}"
 
