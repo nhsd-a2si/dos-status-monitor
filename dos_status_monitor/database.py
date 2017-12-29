@@ -32,7 +32,7 @@ def add_status(status):
 def get_previous_snapshot_for_service(service_id):
     # TODO: Fix so it doesn't throw an error if there's only one previous snapshot
     logger.debug("Getting latest snapshot from database")
-    query = {'id': service_id}
+    query = {'id': service_id, 'source': config.APP_NAME}
     results = snapshots.find(query).sort([('checkTime',
                                            pymongo.DESCENDING)]).skip(1).limit(1)
     return results
