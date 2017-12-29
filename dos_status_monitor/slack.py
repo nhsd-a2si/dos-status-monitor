@@ -19,8 +19,8 @@ def send_slack_notification(service_name, region,
                             service_type, changed_at, 
                             changed_by):
 
-    logger.info(f'Sending Slack notification to '
-                f'{config.SLACK_CHANNEL}')
+    if changed_by == 'ROBOT':
+        automatic_change = True
 
     if capacity == 'HIGH':
         severity = 'good'
@@ -35,10 +35,10 @@ def send_slack_notification(service_name, region,
         rag_colour = 'RED'
         emoji = ':red_circle:'
         
-    if changed_by == 'ROBOT':
-        description = f"{service_name} was reset to {emoji} {capacity} by :robot_face:"
+    if automatic_change:
+        description = f"{service_name} was reset to {capacity} by the :robot_face:"
     else:
-        description = f"{service_name} has changed to {emoji} {capacity}"
+        description = f"{service_name} was changed to {emoji} {capacity}"
 
     message = {
                 "username": f"Capacity Monitor ({app_name})",
@@ -47,7 +47,6 @@ def send_slack_notification(service_name, region,
                    {
                         "fallback": description,
                         "pretext": description,
-                        "color": f"{severity}",
                         "fields": [
                             {
                                 "title": f"Previously",
@@ -75,6 +74,12 @@ def send_slack_notification(service_name, region,
             }
 
     body = json.dumps(message)
+
+    if not automatic_change:
+        message['color'] = f"{severity}"
+
+    logger.info(f'Sending Slack notification to '
+                f'{config.SLACK_CHANNEL}')
 
     r = requests.post(url, body)
 
