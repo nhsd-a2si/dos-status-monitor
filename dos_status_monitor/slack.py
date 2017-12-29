@@ -88,14 +88,21 @@ def send_slack_status_update():
 
     now = time.strftime("%H:%M")
 
+    if len(service_list) < 1:
+        message_text = f"At {now}, there are no services indicating " \
+                       f"low capacity."
+    else:
+        message_text = f"At {now}, these services are indicating low " \
+                       f"capacity (a status of NONE means they are not " \
+                       f"returning in DoS searches)."
+
     message = {
         "username": f"Capacity Monitor ({app_name})",
         "channel": slack_channel,
         "attachments": [
             {
                 "fallback": "Capacity Status Summary",
-                "pretext": f"At {now}, these services are indicating low capacity  "
-                           "(status of NONE means they are not returning in DoS searches)."
+                "pretext": message_text
             }
         ]
     }
