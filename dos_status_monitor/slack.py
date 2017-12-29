@@ -19,8 +19,7 @@ def send_slack_notification(service_name, region,
                             service_type, changed_at, 
                             changed_by):
 
-    if changed_by == 'ROBOT':
-        automatic_change = True
+    automatic_change = True if changed_by == 'ROBOT' else False
 
     if capacity == 'HIGH':
         severity = 'good'
@@ -36,7 +35,7 @@ def send_slack_notification(service_name, region,
         emoji = ':red_circle:'
         
     if automatic_change:
-        description = f"{service_name} was reset to {capacity} by the :robot_face:"
+        description = f"{service_name} Status cleared by the :robot_face:"
     else:
         description = f"{service_name} was changed to {emoji} {capacity}"
 
