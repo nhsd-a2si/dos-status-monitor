@@ -110,7 +110,8 @@ def has_status_changed(service_id, new_status):
                 q.enqueue(sms.send_sms, config.MOBILE_NUMBER,
                           f"{service_name} ({service_id}) in {service_region} "
                           f"changed to {service_status} ({service_rag}) by "
-                          f"{service_updated_by} at {service_updated_time}.")
+                          f"{service_updated_by} at {service_updated_time}.",
+                          at_front=True)
 
             if config.SLACK_ENABLED:
                 q.enqueue(slack.send_slack_notification,
@@ -120,7 +121,8 @@ def has_status_changed(service_id, new_status):
                           old_status,
                           service_type,
                           service_updated_time,
-                          service_updated_by)
+                          service_updated_by,
+                          at_front=True)
 
         else:
             logger.debug(f"Status for {service_id} hasn't changed")
@@ -162,9 +164,11 @@ def check_single_service(service_id):
     store_snapshot(service)
 
     if new_capacity != "":
-        logger.debug('Capacity is set, so queueing for a status check')
+        logger.debug('Capacity is not empty, '
+                     'so queueing a status check for this service.')
         q.enqueue(has_status_changed,
                   service['id'],
-                  service['capacity']['status']['human'])
+                  service['capacity']['status']['human'],
+                  at_front=True)
     else:
         logger.debug("Capacity is empty so skipping status check")
