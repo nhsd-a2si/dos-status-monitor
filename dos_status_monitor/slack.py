@@ -73,7 +73,7 @@ def send_slack_notification(service_name, region,
             }
 
     if not automatic_change:
-        message['attachments']['color'] = f"{severity}"
+        message['attachments'][0]['color'] = f"{severity}"
 
     body = json.dumps(message)
     
