@@ -11,7 +11,7 @@ q = Queue(connection=conn)
 
 def store_snapshot(service):
     if service['capacity']['status']['human']:
-        print(f"{service['name']} - {service['capacity']['status']['human']}")
+        logger.debug(f"{service['name']} - {service['capacity']['status']['human']}")
 
     snapshot = {
         'id': service['id'],
@@ -39,8 +39,7 @@ def store_snapshot(service):
         'source': config.APP_NAME
     }
 
-    r = database.add_status(status)
-    logger.debug(r)
+    database.add_status(status)
 
 
 def has_status_changed(service_id, new_status):
