@@ -75,7 +75,7 @@ def send_slack_notification(service_name, region,
     body = json.dumps(message)
 
     if not automatic_change:
-        message['color'] = f"{severity}"
+        message['attachments']['color'] = f"{severity}"
 
     logger.info(f'Sending Slack notification to '
                 f'{config.SLACK_CHANNEL}')
