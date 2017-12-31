@@ -39,3 +39,5 @@ SMS_ENABLED = config_string_to_bool(os.environ.get('SMS_ENABLED', ''))
 # Monitor Settings
 # e.g. "POSTCODE:DISTANCE:TYPES:NUMBER|POSTCODE:DIST:TYPES:NUMBER"
 PROBE_LIST = os.environ.get('PROBE_LIST', '')
+
+ROLLBAR_ACCESS_TOKEN = os.environ.get('ROLLBAR_ACCESS_TOKEN', '')

@@ -1,8 +1,12 @@
 [[source]]
+
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 
+
 [dev-packages]
+
+
 
 [packages]
 
@@ -12,7 +16,9 @@ schedule = "*"
 rq = "*"
 pymongo = {extras = ["tls"]}
 pytest = "*"
+rollbar = "*"
 
 
 [requires]
+
 python_version = "3.6"

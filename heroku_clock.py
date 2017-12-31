@@ -1,9 +1,12 @@
 import schedule
 import time
 import redis
+import rollbar
 from rq import Queue
 
 from dos_status_monitor import dos_status_monitor, probes, config, slack
+
+rollbar.init(config.ROLLBAR_ACCESS_TOKEN, config.APP_NAME)
 
 # Set up RQ queue
 conn = redis.from_url(config.REDIS_URL)
@@ -54,7 +57,10 @@ print(f"{len(probes.get_probe_list())} probes configured to run "
 print("Slack Status Summary will run every "
       f"{config.STATUS_UPDATE_RATE_MINUTES} minute(s).")
 
-while True:
-    print(f"Ping!")
-    schedule.run_pending()
-    time.sleep(60)
+try:
+    while True:
+        print(f"Ping!")
+        schedule.run_pending()
+        time.sleep(60)
+except:
+    rollbar.report_exc_info()
