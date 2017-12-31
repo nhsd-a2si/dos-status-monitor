@@ -66,17 +66,19 @@ def has_status_changed(service_id, new_status):
                 logger.info("Skipping change as it's just the 24h robot")
                 return
 
-            data = uec_dos.get_service_by_service_id(service_id)
+            # Retrieve the entire service record from the DoS as this
+            # contains details of the person who changed the status
+            service_data = uec_dos.get_service_by_service_id(service_id)
 
-            service_updated_by = data['success']['services'][0]['capacity']['updated']['by']
-            service_status = data['success']['services'][0]['capacity']['status']['human']
-            service_rag = data['success']['services'][0]['capacity']['status']['rag']
-            service_name = data['success']['services'][0]['name']
-            service_postcode = data['success']['services'][0]['postcode']
-            service_updated_date = data['success']['services'][0]['capacity']['updated']['date']
-            service_updated_time = data['success']['services'][0]['capacity']['updated']['time']
-            service_region = data['success']['services'][0]['region']['name']
-            service_type = data['success']['services'][0]['type']['name']
+            service_updated_by = service_data['capacity']['updated']['by']
+            service_status = service_data['capacity']['status']['human']
+            service_rag = service_data['capacity']['status']['rag']
+            service_name = service_data['name']
+            service_postcode = service_data['postcode']
+            service_updated_date = service_data['capacity']['updated']['date']
+            service_updated_time = service_data['capacity']['updated']['time']
+            service_region = service_data['region']['name']
+            service_type = service_data['type']['name']
 
             # Fix the incorrect service_updated_time by subtracting an hour from the supplied time.
             # TODO: Remove this fix when the API is fixed to return the correct local time
@@ -153,9 +155,9 @@ def run_service_search(probe):
 
 
 def check_single_service(service_id):
-    data = uec_dos.get_service_by_service_id(service_id)
+    service = uec_dos.get_service_by_service_id(service_id)
+
     try:
-        service = data['success']['services'][0]
         new_capacity = service['capacity']['status']['human']
         logger.debug(service_id)
         logger.debug(service['name'])
