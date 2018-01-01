@@ -135,12 +135,14 @@ def run_service_search(probe):
     service_types = probe['service_types']
     number_per_type = probe['number_per_type']
 
-    logger.info(f"Running probe for {postcode}, at {search_distance} miles, "
-                f"for {number_per_type} each of service types: {service_types}")
+    services = uec_dos.get_services_by_service_search(postcode,
+                                                      search_distance,
+                                                      service_types,
+                                                      number_per_type)
 
-    services = uec_dos.get_services_by_service_search(postcode, search_distance, service_types, number_per_type)
-
-    logger.info(f"Took snapshot for {len(services)} services")
+    logger.info(f"Running probe for {postcode}, at {search_distance} "
+                f"miles, for {number_per_type} each of service types: "
+                f"{service_types} - {len(services)} services")
 
     for service in services:
 
