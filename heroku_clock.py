@@ -13,39 +13,44 @@ conn = redis.from_url(config.REDIS_URL)
 q = Queue(connection=conn)
 
 
-def add_search_job():
+def add_search_jobs():
     probe_list = probes.get_probe_list()
+    search_job_count = 0
     
     for probe in probe_list:
-        print("Adding job to queue")
         q.enqueue(dos_status_monitor.run_service_search,
                   probe,
                   ttl=f'{config.CHECK_RATE_MINUTES}m')
+        search_job_count += 1
+
+    print(f'Added {search_job_count} search jobs to the queue')
 
 
 def add_service_jobs():
     service_list = probes.get_watched_service_list()
-    print(f'Watched Services: {service_list.count()}')
+    service_job_count = 0
+
     for service in service_list:
         service_id = service['id']
-        print(f"Adding job for {service_id}")
         q.enqueue(dos_status_monitor.check_single_service,
                   service_id,
                   ttl=f'{config.CHECK_RATE_MINUTES}m')
+        service_job_count += 1
+    print(f'Added {service_job_count} service jobs to the queue')
 
 
 def add_service_status_job():
-    print('Queueing Slack status update')
     q.enqueue(slack.send_slack_status_update,
               ttl=f'{config.STATUS_UPDATE_RATE_MINUTES}m')
+    print('Added Slack status update to the queue')
 
 
-add_search_job()
+add_search_jobs()
 add_service_jobs()
 add_service_status_job()
 
 schedule.every(config.CHECK_RATE_MINUTES).minutes\
-    .do(add_search_job)
+    .do(add_search_jobs)
 schedule.every(config.CHECK_RATE_MINUTES).minutes\
     .do(add_service_jobs)
 schedule.every(config.STATUS_UPDATE_RATE_MINUTES).minutes\
