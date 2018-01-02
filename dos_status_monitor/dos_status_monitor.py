@@ -63,7 +63,7 @@ def has_status_changed(service_id, new_status):
 
             if (old_status == 'HIGH' and new_status == '') \
                     or (old_status == '' and new_status == 'HIGH'):
-                logger.info("Skipping change as it's just the 24h robot")
+                logger.info("Skipping change as it's just the 24h ROBOT")
                 return
 
             # Retrieve the entire service record from the DoS as this
@@ -153,7 +153,7 @@ def run_service_search(probe):
                       service['id'],
                       service['capacity']['status']['human'])
         else:
-            logger.debug("Capacity is empty so skipping status check")
+            logger.debug("Capacity empty - skipping status check")
 
 
 def check_single_service(service_id):
@@ -168,8 +168,9 @@ def check_single_service(service_id):
         store_snapshot(service)
 
         if new_capacity != "":
-            logger.debug('Capacity is not empty, '
-                         'so queueing a status check for this service.')
+            logger.debug('Capacity not empty - '
+                         f'queueing status check for {service_id}')
+
             q.enqueue(has_status_changed,
                       service['id'],
                       service['capacity']['status']['human'],
