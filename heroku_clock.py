@@ -5,6 +5,7 @@ import rollbar
 from rq import Queue
 
 from dos_status_monitor import dos_status_monitor, probes, config, slack
+from dos_status_monitor import logger
 
 rollbar.init(config.ROLLBAR_ACCESS_TOKEN, config.APP_NAME)
 
@@ -23,7 +24,8 @@ def add_search_jobs():
                   ttl=f'{config.CHECK_RATE_MINUTES}m')
         search_job_count += 1
 
-    print(f'Added {search_job_count} search jobs to the queue')
+        logger.info(f"{search_job_count} search probes configured to "
+                    f"run every {config.CHECK_RATE_MINUTES} minute(s).")
 
 
 def add_service_jobs():
@@ -36,18 +38,20 @@ def add_service_jobs():
                   service_id,
                   ttl=f'{config.CHECK_RATE_MINUTES}m')
         service_job_count += 1
-    print(f'Added {service_job_count} service jobs to the queue')
 
+        logger.info(f"{service_job_count} service probes configured to "
+                    f"run every {config.CHECK_RATE_MINUTES} minute(s).")
 
 def add_service_status_job():
     q.enqueue(slack.send_slack_status_update,
               ttl=f'{config.STATUS_UPDATE_RATE_MINUTES}m')
-    print('Added Slack status update to the queue')
 
 
 add_search_jobs()
 add_service_jobs()
 add_service_status_job()
+        logger.info("Slack Status Summary will run every "
+                    f"{config.STATUS_UPDATE_RATE_MINUTES} minute(s).")
 
 schedule.every(config.CHECK_RATE_MINUTES).minutes\
     .do(add_search_jobs)
@@ -56,15 +60,13 @@ schedule.every(config.CHECK_RATE_MINUTES).minutes\
 schedule.every(config.STATUS_UPDATE_RATE_MINUTES).minutes\
     .do(add_service_status_job)
 
-print(f"{len(probes.get_probe_list())} probes configured to run "
-      f"every {config.CHECK_RATE_MINUTES} minute(s).")
 
 print("Slack Status Summary will run every "
       f"{config.STATUS_UPDATE_RATE_MINUTES} minute(s).")
 
 try:
     while True:
-        print(f"Ping!")
+        logger.debug(f"Ping!")
         schedule.run_pending()
         time.sleep(60)
 except:
