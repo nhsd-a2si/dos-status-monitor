@@ -30,7 +30,6 @@ def get_probe_list():
 
 def get_watched_service_list():
     service_list = database.get_service_watchlist()
-    logger.debug(service_list)
-    return service_list
+    return list(service_list)
 
 
