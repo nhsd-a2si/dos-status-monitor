@@ -9,6 +9,24 @@ conn = redis.from_url(config.REDIS_URL)
 q = Queue(connection=conn)
 
 
+def update_status(service):
+
+    status = {
+        'id': service['id'],
+        'name': service['name'],
+        'type': service['type']['name'],
+        'postCode': service['postcode'],
+        'easting': service['easting'],
+        'northing': service['northing'],
+        'lastUpdated': datetime.datetime.utcnow(),
+        'capacity': service['capacity']['status']['human'],
+        'rag': service['capacity']['status']['rag'],
+        'source': config.APP_NAME
+    }
+
+    database.add_status(status)
+
+
 def store_snapshot(service):
     if service['capacity']['status']['human']:
         logger.debug(f"{service['name']} - {service['capacity']['status']['human']}")
@@ -30,20 +48,7 @@ def store_snapshot(service):
 
     database.add_snapshot(snapshot)
 
-    status = {
-        'id': service['id'],
-        'name': service['name'],
-        'type': service['type']['name'],
-        'postCode': service['postcode'],
-        'easting': service['easting'],
-        'northing': service['northing'],
-        'checkTime': datetime.datetime.utcnow(),
-        'capacity': service['capacity']['status']['human'],
-        'rag': service['capacity']['status']['rag'],
-        'source': config.APP_NAME
-    }
-
-    database.add_status(status)
+    update_status(service)
 
 
 def has_status_changed(service_id, new_status):
