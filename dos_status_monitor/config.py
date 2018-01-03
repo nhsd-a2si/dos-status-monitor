@@ -42,6 +42,7 @@ PROBE_LIST = os.environ.get('PROBE_LIST', '')
 
 ROLLBAR_ACCESS_TOKEN = os.environ.get('ROLLBAR_ACCESS_TOKEN', '')
 
+# Basic Auth Settings
 BASIC_AUTH_USERNAME = os.environ.get('BASIC_AUTH_USERNAME', 'user')
 BASIC_AUTH_PASSWORD = os.environ.get('BASIC_AUTH_PASSWORD', 'pass')
 BASIC_AUTH_FORCE = config_string_to_bool(os.environ.get('BASIC_AUTH_FORCE', 'True'))
