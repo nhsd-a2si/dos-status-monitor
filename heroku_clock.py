@@ -1,13 +1,10 @@
 import schedule
 import time
 import redis
-import rollbar
 from rq import Queue
 
 from dos_status_monitor import dos_status_monitor, probes, config, slack
 from dos_status_monitor import logger
-
-rollbar.init(config.ROLLBAR_ACCESS_TOKEN, config.APP_NAME)
 
 try:
 
