@@ -20,6 +20,7 @@ rollbar = "*"
 flask = "*"
 gunicorn = "*"
 flask-basicauth = "*"
+flask-cors = "*"
 
 
 [requires]

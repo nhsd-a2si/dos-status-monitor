@@ -1,9 +1,10 @@
 from flask import Flask
 from flask import jsonify
 from flask_basicauth import BasicAuth
+from flask_cors import CORS
 
 app = Flask(__name__)
-
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 from dos_status_monitor import database, logger, config
 
