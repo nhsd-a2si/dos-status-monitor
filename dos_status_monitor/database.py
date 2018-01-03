@@ -48,9 +48,11 @@ def get_service_watchlist():
 
 def get_service_statuses():
     logger.debug("Getting service status list from database")
-    query = {}
-    results = statuses.find(query).sort([('capacity',
-                                          pymongo.DESCENDING)])
+
+    projection = {'_id': False}
+    results = statuses.find(projection=projection)\
+        .sort([('capacity', pymongo.DESCENDING)])
+
     result_list = []
 
     for result in results:

@@ -17,6 +17,8 @@ rq = "*"
 pymongo = {extras = ["tls"]}
 pytest = "*"
 rollbar = "*"
+flask = "*"
+gunicorn = "*"
 
 
 [requires]
