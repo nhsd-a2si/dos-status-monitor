@@ -22,7 +22,7 @@ def add_snapshot(document):
     snapshots.insert(document)
 
 
-def add_status(status):
+def update_status(status):
     query = {'id': status['id']}
     update = {'$set': status}
     r = statuses.update_one(query, update, upsert=True)

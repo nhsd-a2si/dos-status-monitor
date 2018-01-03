@@ -24,7 +24,7 @@ def update_status(service):
         'source': config.APP_NAME
     }
 
-    database.add_status(status)
+    database.update_status(status)
 
 
 def store_snapshot(service):
