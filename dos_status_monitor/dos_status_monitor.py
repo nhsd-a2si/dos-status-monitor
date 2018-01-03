@@ -18,6 +18,8 @@ def store_snapshot(service):
         'name': service['name'],
         'type': service['type']['name'],
         'postCode': service['postcode'],
+        'easting': service['easting'],
+        'northing': service['northing'],
         'checkTime': datetime.datetime.utcnow(),
         'capacity': {
             'status': service['capacity']['status']['human'],
@@ -33,6 +35,8 @@ def store_snapshot(service):
         'name': service['name'],
         'type': service['type']['name'],
         'postCode': service['postcode'],
+        'easting': service['easting'],
+        'northing': service['northing'],
         'checkTime': datetime.datetime.utcnow(),
         'capacity': service['capacity']['status']['human'],
         'rag': service['capacity']['status']['rag'],
