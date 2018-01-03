@@ -19,6 +19,7 @@ pytest = "*"
 rollbar = "*"
 flask = "*"
 gunicorn = "*"
+flask-basicauth = "*"
 
 
 [requires]
