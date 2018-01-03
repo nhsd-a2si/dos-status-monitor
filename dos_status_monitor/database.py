@@ -24,8 +24,8 @@ def add_snapshot(document):
 
 def add_status(status):
     query = {'id': status['id']}
-    update = status
-    r = statuses.update(query, update, upsert=True)
+    update = {'$set': status}
+    r = statuses.update_one(query, update, upsert=True)
     return r
 
 
