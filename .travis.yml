@@ -4,8 +4,11 @@ python:
   - "3.7-dev"
   - "nightly"
   - "pypy3"
+services:
+  - mongodb
+  - redis-server
 env:
-  - APP_NAME=Travis
+  - APP_NAME=travis-ci
 before_install:
   - pip install pipenv
 install:

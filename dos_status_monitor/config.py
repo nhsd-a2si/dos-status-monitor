@@ -12,7 +12,7 @@ def config_string_to_bool(setting):
 APP_NAME = os.environ.get('APP_NAME', 'DEV')
 
 # Database Settings
-MONGODB_URI = os.environ.get('MONGODB_URI', 'mongodb://localhost:32771/dos_monitor')
+MONGODB_URI = os.environ.get('MONGODB_URI', 'mongodb://127.0.0.1:27017/dos_monitor')
 REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379')
 
 # Scheduling Settings
