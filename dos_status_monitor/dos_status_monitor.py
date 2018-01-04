@@ -82,10 +82,11 @@ def has_status_changed(service_id):
 
     status = database.get_status_for_single_service(service_id)
 
-    old_status = status['capacity']
-    old_rag = status['rag']
+    if status:
+        old_status = status['capacity']
+        old_rag = status['rag']
 
-    if not old_status:
+    elif not status:
         service_data = uec_dos.get_service_by_service_id(service_id)
         logger.warn("No status for this service - adding a status entry")
         update_status_from_service_data(service_data)
