@@ -12,30 +12,38 @@ snapshots = db['snapshots']
 changes = db['changes']
 statuses = db['statuses']
 watched_services = db['watched_services']
+watched_searches = db['watched_services']
 
 
 def add_change(document):
     changes.insert(document)
+    logger.debug(f"Added change event for {document['id']}")
 
 
 def add_snapshot(document):
     snapshots.insert(document)
+    logger.debug(f"Added snapshot for {document['id']}")
 
 
-def update_status(status):
-    query = {'id': status['id']}
-    update = {'$set': status}
-    r = statuses.update_one(query, update, upsert=True)
-    return r
+def update_status(document):
+    query = {'id': document['id']}
+    update = {'$set': document}
+    try:
+        r = statuses.update_one(query, update, upsert=True)
+        logger.debug(f"Updated status for {document['id']}")
+        return r
+    except:
+        logger.error(f"Failed to update status for {document['id']}")
+        raise
 
 
-def get_previous_snapshot_for_service(service_id):
+def get_most_recent_snapshot_for_service(service_id):
     # TODO: Fix so it doesn't throw an error if there's only one previous snapshot
     logger.debug("Getting latest snapshot from database")
     query = {'id': service_id, 'source': config.APP_NAME}
-    results = snapshots.find(query).sort([('checkTime',
-                                           pymongo.DESCENDING)]).skip(1).limit(1)
-    return results
+    results = snapshots.find(query).sort([('snapshotTime', pymongo.DESCENDING)]).limit(1)
+    result = results[0]
+    return result
 
 
 def get_service_watchlist():
@@ -46,8 +54,8 @@ def get_service_watchlist():
     return results
 
 
-def get_service_statuses():
-    logger.debug("Getting service status list from database")
+def get_all_statuses():
+    logger.debug("Getting all service statuses")
 
     projection = {'_id': False}
     results = statuses.find(projection=projection)\
@@ -60,6 +68,19 @@ def get_service_statuses():
             result_list.append(result)
 
     return result_list
+
+
+def get_status_for_single_service(service_id):
+    logger.debug(f"Getting status for single service {service_id}")
+    query = {'id': service_id}
+    projection = {'id': True, 'capacity': True, 'rag': True}
+    result = statuses.find_one(query, projection=projection)
+    try:
+        return result
+
+    except TypeError:
+        logger.debug(f'No status found for {service_id}')
+        return None
 
 
 def add_watched_service(service_id):

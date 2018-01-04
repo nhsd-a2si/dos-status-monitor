@@ -9,18 +9,38 @@ conn = redis.from_url(config.REDIS_URL)
 q = Queue(connection=conn)
 
 
-def update_status(service):
+def update_status_from_service_data(service_data):
 
     status = {
-        'id': service['id'],
-        'name': service['name'],
-        'type': service['type']['name'],
-        'postCode': service['postcode'],
-        'easting': service['easting'],
-        'northing': service['northing'],
-        'lastUpdated': datetime.datetime.utcnow(),
-        'capacity': service['capacity']['status']['human'],
-        'rag': service['capacity']['status']['rag'],
+        'id': service_data['id'],
+        'name': service_data['name'],
+        'type': service_data['type']['name'],
+        'postCode': service_data['postcode'],
+        'easting': service_data['easting'],
+        'northing': service_data['northing'],
+        'lastUpdatedTime': datetime.datetime.utcnow(),
+        'capacity': service_data['capacity']['status']['human'],
+        'rag': service_data['capacity']['status']['rag'],
+        'source': config.APP_NAME
+    }
+
+    database.update_status(status)
+
+
+def update_status_from_latest_snapshot(service_id):
+
+    snapshot = database.get_most_recent_snapshot_for_service(service_id)
+
+    status = {
+        'id': snapshot['id'],
+        'name': snapshot['name'],
+        'type': snapshot['type'],
+        'postCode': snapshot['postCode'],
+        'easting': snapshot['easting'],
+        'northing': snapshot['northing'],
+        'lastUpdatedTime': datetime.datetime.utcnow(),
+        'capacity': snapshot['capacity']['status'],
+        'rag': snapshot['capacity']['rag'],
         'source': config.APP_NAME
     }
 
@@ -38,7 +58,7 @@ def store_snapshot(service):
         'postCode': service['postcode'],
         'easting': service['easting'],
         'northing': service['northing'],
-        'checkTime': datetime.datetime.utcnow(),
+        'snapshotTime': datetime.datetime.utcnow(),
         'capacity': {
             'status': service['capacity']['status']['human'],
             'rag': service['capacity']['status']['rag'],
@@ -48,30 +68,46 @@ def store_snapshot(service):
 
     database.add_snapshot(snapshot)
 
-    update_status(service)
 
-
-def has_status_changed(service_id, new_status):
-    logger.debug(f'Service ID: {service_id}')
-    logger.debug(f'Latest Status: {new_status}')
-    results = database.get_previous_snapshot_for_service(service_id)
-    if results.count() > 0:
-        result = results[0]
-        logger.debug(f'Result: {result}')
+def is_robot_change(old_status, new_status):
+    if old_status == 'HIGH' and new_status == '':
+        return True
     else:
-        result = None
+        return False
 
-    if result:
 
-        logger.debug(f'Processing: {result}')
+def has_status_changed(service_id):
 
-        old_status = result['capacity']['status']
-        logger.debug(f'Previous Status: {old_status}')
+    logger.debug(f'Checking status for {service_id}')
 
-        if old_status != new_status:
+    status = database.get_status_for_single_service(service_id)
 
-            if (old_status == 'HIGH' and new_status == '') \
-                    or (old_status == '' and new_status == 'HIGH'):
+    old_status = status['capacity']
+    old_rag = status['rag']
+
+    if not old_status:
+        service_data = uec_dos.get_service_by_service_id(service_id)
+        logger.warn("No status for this service - adding a status entry")
+        update_status_from_service_data(service_data)
+        return
+
+    service_snapshot = database.get_most_recent_snapshot_for_service(service_id)
+
+    new_status = service_snapshot['capacity']['status']
+
+    if service_snapshot:
+
+        logger.debug(f'Previous Status: {old_status}, '
+                     f'New Status: {new_status}')
+
+        if old_status == new_status:
+            logger.debug(f"Status for {service_id} hasn't changed")
+            update_status_from_latest_snapshot(service_id)
+            return
+
+        elif old_status != new_status:
+
+            if is_robot_change(old_status, new_status):
                 logger.info("Skipping change as it's just the 24h ROBOT")
                 return
 
@@ -89,32 +125,35 @@ def has_status_changed(service_id, new_status):
             service_region = service_data['region']['name']
             service_type = service_data['type']['name']
 
+            logger.info(f"Status has changed for {service_id} - "
+                        f"{service_name} - {service_status} "
+                        f"({service_rag})")
+
             # Fix the incorrect service_updated_time by subtracting an hour from the supplied time.
             # TODO: Remove this fix when the API is fixed to return the correct local time
             # service_updated_time = utils.remove_1_hour_from_time_string(service_updated_time)
-
-            logger.info(f"Status has changed for {service_id} - {service_name} - {service_status} ({service_rag})")
 
             document = {'id': service_id,
                         'name': service_name,
                         'type': service_type,
                         'postCode': service_postcode,
                         'region': service_region,
-                        'checkTime': datetime.datetime.utcnow(),
+                        'eventTime': datetime.datetime.utcnow(),
                         'capacity': {
-                            'status': service_status,
-                            'rag': service_rag,
-                            'previousStatus': result['capacity']['status'],
-                            'previousRag': result['capacity']['rag'],
-                            'updatedBy': service_updated_by,
-                            'updatedDate': service_updated_date,
-                            'updatedTime': service_updated_time
+                            'newStatus': service_status,
+                            'newRag': service_rag,
+                            'previousStatus': old_status,
+                            'previousRag': old_rag,
+                            'changedBy': service_updated_by,
+                            'changedDate': service_updated_date,
+                            'changedTime': service_updated_time
                         },
                         'source': config.APP_NAME
                         }
 
             database.add_change(document)
-            logger.debug("Change added to database")
+
+            update_status_from_service_data(service_data)
 
             if config.SMS_ENABLED:
                 q.enqueue(sms.send_sms, config.MOBILE_NUMBER,
@@ -134,11 +173,10 @@ def has_status_changed(service_id, new_status):
                           service_updated_by,
                           at_front=True)
 
-        else:
-            logger.debug(f"Status for {service_id} hasn't changed")
+            return
 
 
-def run_service_search(probe):
+def snapshot_service_search(probe):
     postcode = probe['postcode']
     search_distance = probe['search_distance']
     service_types = probe['service_types']
@@ -159,13 +197,12 @@ def run_service_search(probe):
 
         if service['capacity']['status']['human'] != "":
             q.enqueue(has_status_changed,
-                      service['id'],
-                      service['capacity']['status']['human'])
+                      service['id'])
         else:
             logger.debug("Capacity empty - skipping status check")
 
 
-def check_single_service(service_id):
+def snapshot_single_service(service_id):
     service = uec_dos.get_service_by_service_id(service_id)
 
     try:
@@ -182,7 +219,6 @@ def check_single_service(service_id):
 
             q.enqueue(has_status_changed,
                       service['id'],
-                      service['capacity']['status']['human'],
                       at_front=True)
         else:
             logger.debug("Capacity is empty so skipping status check")
