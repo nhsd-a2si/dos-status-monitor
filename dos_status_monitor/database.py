@@ -61,11 +61,20 @@ def get_all_statuses():
     results = statuses.find(projection=projection)\
         .sort([('capacity', pymongo.DESCENDING)])
 
-    result_list = []
+    result_list = [result for result in results]
 
-    for result in results:
-        if result['capacity'] not in ('', 'HIGH'):
-            result_list.append(result)
+    return result_list
+
+
+def get_low_statuses():
+    logger.debug("Getting low service statuses")
+
+    projection = {'_id': False}
+    results = statuses.find(projection=projection)\
+        .sort([('capacity', pymongo.DESCENDING)])
+
+    result_list = [result for result in results
+                   if result['capacity'] not in ('', 'HIGH')]
 
     return result_list
 

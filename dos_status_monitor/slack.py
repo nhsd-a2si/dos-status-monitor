@@ -88,7 +88,7 @@ def send_slack_notification(service_name, region,
 
 def send_slack_status_update():
 
-    service_list = database.get_all_statuses()
+    service_list = database.get_low_statuses()
 
     now = time.strftime("%H:%M")
 
