@@ -64,7 +64,7 @@
     // Adds a marker to the map.
     function addMarker(index, map) {
         var colour = 'green'
-        if (services[index].capacity == "LOW") colour = "yellow"
+        if (services[index].capacity == "LOW") colour = "orange"
         if (services[index].capacity == "NONE") colour = "red"
         
         markers[index] = new google.maps.Marker({
