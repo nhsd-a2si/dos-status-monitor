@@ -1,5 +1,7 @@
 import redis
 from rq import Worker, Queue, Connection
+import requests
+import pymongo
 
 from dos_status_monitor import config
 
