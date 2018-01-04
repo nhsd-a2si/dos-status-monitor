@@ -12,7 +12,7 @@ snapshots = db['snapshots']
 changes = db['changes']
 statuses = db['statuses']
 watched_services = db['watched_services']
-watched_searches = db['watched_services']
+watched_searches = db['watched_searches']
 
 
 def add_change(document):
@@ -46,11 +46,11 @@ def get_most_recent_snapshot_for_service(service_id):
     return result
 
 
-def get_service_watchlist():
+def get_watched_services():
     logger.debug("Getting service watchlist from database")
     query = {}
-    results = watched_services.find(query).sort([('id',
-                                                  pymongo.DESCENDING)])
+    results = watched_services.find(query)
+    print(results.count())
     return results
 
 

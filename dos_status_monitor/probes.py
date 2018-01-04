@@ -29,7 +29,7 @@ def get_probe_list():
 
 
 def get_watched_service_list():
-    service_list = database.get_service_watchlist()
+    service_list = database.get_watched_services()
     return list(service_list)
 
 
