@@ -35,9 +35,9 @@ def send_slack_notification(service_name, region,
         emoji = ':red_circle:'
         
     if automatic_change:
-        description = f"{service_name} Status cleared by the :robot_face:"
+        description = f"{service_name} status was reset by the :robot_face:"
     else:
-        description = f"{service_name} was changed to {emoji} {capacity}"
+        description = f"{service_name} was changed by a user to {emoji} {capacity}"
 
     message = {
                 "username": f"Capacity Monitor ({app_name})",
