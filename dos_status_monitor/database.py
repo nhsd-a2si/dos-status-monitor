@@ -61,7 +61,8 @@ def get_all_statuses():
     results = statuses.find(projection=projection)\
         .sort([('capacity', pymongo.DESCENDING)])
 
-    result_list = [result for result in results]
+    result_list = [result for result in results
+                   if result['capacity'] != ""]
 
     return result_list
 
