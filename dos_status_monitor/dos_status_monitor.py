@@ -194,13 +194,15 @@ def snapshot_service_search(probe):
 
     for service in services:
 
+        service_id = service['id']
         store_snapshot(service)
 
         if service['capacity']['status']['human'] != "":
             q.enqueue(has_status_changed,
-                      service['id'])
+                      service_id)
         else:
             logger.debug("Capacity empty - skipping status check")
+            update_status_from_latest_snapshot(service_id)
 
 
 def snapshot_single_service(service_id):
