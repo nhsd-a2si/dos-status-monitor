@@ -27,8 +27,7 @@ def get_statuses():
 def get_coverage_data():
     statuses = database.get_all_postcodes()
     count = len(statuses)
-    print(statuses)
-    logger.info(f"REQUEST /statuses {count} records")
+    logger.info(f"REQUEST /coverage_data {count} records")
     return jsonify(statuses)
 
 
@@ -37,6 +36,7 @@ def status_map():
     api_key = config.GOOGLE_MAPS_API_KEY
     return render_template('index.html',
                            api_key=api_key)
+
 
 @app.route('/coverage')
 def coverage_map():
