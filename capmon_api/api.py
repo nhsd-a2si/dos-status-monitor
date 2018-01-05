@@ -1,5 +1,5 @@
 from flask import Flask
-from flask import jsonify
+from flask import jsonify, render_template
 from flask_basicauth import BasicAuth
 from flask_cors import CORS
 
@@ -21,6 +21,15 @@ def get_statuses():
     count = len(statuses)
     logger.info(f"REQUEST /statuses {count} records")
     return jsonify(statuses)
+
+
+@app.route('/map')
+def status_map():
+    api_key = config.GOOGLE_MAPS_API_KEY
+    data = database.get_all_statuses()
+    return render_template('index.html',
+                           api_key=api_key,
+                           data=data)
 
 
 if __name__ == '__main__':

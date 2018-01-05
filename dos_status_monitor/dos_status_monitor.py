@@ -1,4 +1,5 @@
 import datetime
+import time
 import redis
 from rq import Queue
 
@@ -183,14 +184,16 @@ def snapshot_service_search(probe):
     service_types = probe['service_types']
     number_per_type = probe['number_per_type']
 
+    start = time.time()
     services = uec_dos.get_services_by_service_search(postcode,
                                                       search_distance,
                                                       service_types,
                                                       number_per_type)
+    roundtrip = time.time() - start
 
     logger.info(f"Running probe for {postcode}, at {search_distance} "
                 f"miles, for {number_per_type} each of service types: "
-                f"{service_types} - {len(services)} services")
+                f"{service_types} - {len(services)} services (Took {roundtrip})")
 
     for service in services:
 
@@ -206,7 +209,11 @@ def snapshot_service_search(probe):
 
 
 def snapshot_single_service(service_id):
+
+    start = time.time()
     service = uec_dos.get_service_by_service_id(service_id)
+    roundtrip = time.time() - start
+    logger.debug(f"Request took {roundtrip}")
 
     try:
         new_capacity = service['capacity']['status']['human']
