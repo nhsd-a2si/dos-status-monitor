@@ -67,6 +67,17 @@ def get_all_statuses():
     return result_list
 
 
+def get_all_postcodes():
+    logger.debug("Getting all service postcodes")
+
+    projection = {'_id': False}
+    results = statuses.find(projection=projection)
+
+    result_list = [result for result in results]
+
+    return result_list
+
+
 def get_low_statuses():
     logger.debug("Getting low service statuses")
 

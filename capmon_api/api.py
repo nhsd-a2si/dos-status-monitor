@@ -23,13 +23,26 @@ def get_statuses():
     return jsonify(statuses)
 
 
+@app.route('/coverage_data')
+def get_coverage_data():
+    statuses = database.get_all_postcodes()
+    count = len(statuses)
+    print(statuses)
+    logger.info(f"REQUEST /statuses {count} records")
+    return jsonify(statuses)
+
+
 @app.route('/map')
 def status_map():
     api_key = config.GOOGLE_MAPS_API_KEY
-    data = database.get_all_statuses()
     return render_template('index.html',
-                           api_key=api_key,
-                           data=data)
+                           api_key=api_key)
+
+@app.route('/coverage')
+def coverage_map():
+    api_key = config.GOOGLE_MAPS_API_KEY
+    return render_template('coverage_map.html',
+                           api_key=api_key)
 
 
 if __name__ == '__main__':

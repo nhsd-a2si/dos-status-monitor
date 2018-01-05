@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="refresh" content="60">
+    <title>DoS Map</title>
+    <script src="../static/geotools.js" type="text/javascript"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{api_key}}" type="text/javascript"></script>
+    
+    <style>
+        /* Always set the map height explicitly to define the size of the div
+            * element that contains the map. */
+        .map {
+            height: 100%;
+        }
+        /* Optional: Makes the sample page fill the window. */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+    
+</head>
+<body>
+<div class="map" role="presentation"></div>
+
+<script type="text/javascript">
+
+    var map;
+    var services;
+    var infowindow = []
+    var markers = []
+
+    function initialise(services) {
+        services = services
+        var bounds = new google.maps.LatLngBounds()
+
+        for (var i = 0; i < services.length; i++) {
+            var service = services[i]
+            var latlng = OsGridRef.osGridToLatLon(new OsGridRef(service.easting, service.northing), LatLon.datum.OSGB36)
+            service.lat = latlng.lat
+            service.lng = latlng.lon
+            bounds.extend(new google.maps.LatLng(latlng.lat, latlng.lon))
+        }
+
+        map = new google.maps.Map(document.querySelector('.map'), {
+            zoom: 12,
+            minZoom: 6,
+            center: bounds.getCenter()
+        });
+
+        map.fitBounds(bounds)
+        map.panToBounds(bounds)
+        map.setZoom(12)
+
+        for (let i = 0; i < services.length; i++) {
+            addMarker(i, map);
+        }
+
+    }
+
+    // Adds a marker to the map.
+    function addMarker(index, map) {
+
+        markers[index] = new google.maps.Marker({
+            position: services[index],
+            map: map,
+            icon: 'https://maps.google.com/mapfiles/ms/icons/green.png'
+        });
+
+
+        infowindow[index] = new google.maps.InfoWindow({
+            content: "<h3>" + services[index].name + "</h3><p>Type: " + services[index].type + "</p>"
+        });
+
+        markers[index].addListener('click', function () {
+            setActive(index)
+        });
+    }
+
+    function setActive(index) {
+        for (let i = 0; i < infowindow.length; i++) {
+            infowindow[i].close()
+        }
+        infowindow[index].open(map, markers[index])
+    }
+
+    function getData() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/coverage_data');
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                services = JSON.parse(xhr.response)
+                initialise(services);
+            }
+            else {
+                alert('Request failed.  Returned status of ' + xhr.status);
+            }
+        };
+        xhr.send();
+    }
+    getData()
+    // setInterval(getData, 60000)
+
+</script>
+
+
+</body>
+</html>
