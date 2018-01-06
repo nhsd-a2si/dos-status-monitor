@@ -1,5 +1,5 @@
 from dos_status_monitor import config
-from pymongo import MongoClient
+from pymongo import MongoClient, errors
 import pymongo
 
 from dos_status_monitor import logger
@@ -21,8 +21,11 @@ def add_change(document):
 
 
 def add_snapshot(document):
-    snapshots.insert(document)
-    logger.debug(f"Added snapshot for {document['id']}")
+    try:
+        snapshots.insert(document)
+        logger.debug(f"Added snapshot for {document['id']}")
+    except errors.WriteError:
+        logger.error("Unable to write snapshot to database")
 
 
 def update_status(document):
