@@ -3,7 +3,7 @@ import time
 import redis
 from rq import Queue
 
-from dos_status_monitor import dos_status_monitor, probes, config, slack
+from dos_status_monitor import monitor, probes, config, slack
 from dos_status_monitor import logger
 
 # Set up RQ queue
@@ -17,7 +17,7 @@ def add_search_jobs():
     search_job_count = 0
 
     for probe in probe_list:
-        q.enqueue(dos_status_monitor.snapshot_service_search,
+        q.enqueue(monitor.snapshot_service_search,
                   probe,
                   ttl=f'{config.CHECK_RATE_MINUTES}m')
         search_job_count += 1
@@ -33,7 +33,7 @@ def add_service_jobs():
 
     for service in service_list:
         service_id = service['id']
-        q.enqueue(dos_status_monitor.snapshot_single_service,
+        q.enqueue(monitor.snapshot_single_service,
                   service_id,
                   ttl=f'{config.CHECK_RATE_MINUTES}m')
         service_job_count += 1
