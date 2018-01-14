@@ -191,20 +191,23 @@ def snapshot_service_search(probe):
                                                       number_per_type)
     roundtrip = time.time() - start
 
-    logger.info(f"Running probe for {postcode}, at {search_distance} "
+    logger.info(f"Ran probe for {postcode}, at {search_distance} "
                 f"miles, for {number_per_type} each of service types: "
                 f"{service_types} - {len(services)} services (Took {roundtrip})")
 
     for service in services:
 
         service_id = service['id']
-        store_snapshot(service)
 
+        # Only store snapshots and queue status checks if the status has a value
         if service['capacity']['status']['human'] != "":
+
+            store_snapshot(service)
+
             q.enqueue(has_status_changed,
                       service_id)
         else:
-            logger.debug("Capacity empty - skipping status check")
+            logger.debug("Empty capacity - dropping snapshot")
             update_status_from_latest_snapshot(service_id)
 
 
@@ -213,25 +216,23 @@ def snapshot_single_service(service_id):
     start = time.time()
     service = uec_dos.get_service_by_service_id(service_id)
     roundtrip = time.time() - start
-    logger.debug(f"Request took {roundtrip}")
+
+    logger.info(f"Ran probe for {service_id} (Took {roundtrip})")
 
     try:
-        new_capacity = service['capacity']['status']['human']
-        logger.debug(service_id)
-        logger.debug(service['name'])
-        logger.debug(f'New Capacity: {new_capacity}')
+        logger.debug(f"{service_id} - {service['name']}")
 
-        store_snapshot(service)
+        # Only store snapshots and queue status checks if the status has a value
+        if service['capacity']['status']['human'] != "":
+            logger.debug('Storing snapshot and queueing capacity '
+                         'check for {service_id}')
 
-        if new_capacity != "":
-            logger.debug('Capacity not empty - '
-                         f'queueing status check for {service_id}')
+            store_snapshot(service)
 
             q.enqueue(has_status_changed,
-                      service['id'],
-                      at_front=True)
+                      service['id'])
         else:
-            logger.debug("Capacity is empty so skipping status check")
+            logger.debug("Empty capacity - dropping snapshot")
 
     except IndexError:
         logger.exception('Service not found')

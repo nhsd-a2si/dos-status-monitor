@@ -6,6 +6,7 @@ from rq import Queue
 from dos_status_monitor import monitor, probes, config, slack
 from dos_status_monitor import logger
 
+
 # Set up RQ queue
 conn = redis.from_url(config.REDIS_URL)
 q = Queue(connection=conn)
@@ -61,7 +62,6 @@ schedule.every(config.CHECK_RATE_MINUTES).minutes\
     .do(add_service_jobs)
 schedule.every(config.STATUS_UPDATE_RATE_MINUTES).minutes\
     .do(add_service_status_job)
-
 
 while True:
     logger.info(f"Tick!")
