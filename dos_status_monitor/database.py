@@ -57,6 +57,14 @@ def get_watched_services():
     return results
 
 
+def get_watched_searches():
+    logger.debug("Getting search watchlist from database")
+    query = {}
+    results = watched_searches.find(query)
+    print(results.count())
+    return results
+
+
 def get_all_statuses():
     logger.debug("Getting all service statuses")
 
