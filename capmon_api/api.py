@@ -17,7 +17,7 @@ basic_auth = BasicAuth(app)
 
 @app.route('/statuses')
 def get_statuses():
-    statuses = database.get_all_statuses()
+    statuses = database.get_low_statuses()
     count = len(statuses)
     logger.info(f"REQUEST /statuses {count} records")
     return jsonify(statuses)
