@@ -197,17 +197,18 @@ def snapshot_service_search(probe):
 
     for service in services:
 
+        store_snapshot(service)
+
         service_id = service['id']
 
         # Only store snapshots and queue status checks if the status has a value
         if service['capacity']['status']['human'] != "":
-
-            store_snapshot(service)
+            logger.debug('Queueing capacity check for {service_id}')
 
             q.enqueue(has_status_changed,
                       service_id)
         else:
-            logger.debug("Empty capacity - dropping snapshot")
+            logger.debug("Empty capacity - skipping status check")
             update_status_from_latest_snapshot(service_id)
 
 
@@ -219,20 +220,19 @@ def snapshot_single_service(service_id):
 
     logger.info(f"Ran probe for {service_id} (Took {roundtrip})")
 
+    store_snapshot(service)
+
     try:
         logger.debug(f"{service_id} - {service['name']}")
 
         # Only store snapshots and queue status checks if the status has a value
         if service['capacity']['status']['human'] != "":
-            logger.debug('Storing snapshot and queueing capacity '
-                         'check for {service_id}')
-
-            store_snapshot(service)
+            logger.debug('Queueing capacity check for {service_id}')
 
             q.enqueue(has_status_changed,
                       service['id'])
         else:
-            logger.debug("Empty capacity - dropping snapshot")
+            logger.debug("Empty capacity - skipping status check")
 
     except IndexError:
         logger.exception('Service not found')
