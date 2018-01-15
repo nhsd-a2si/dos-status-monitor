@@ -13,7 +13,7 @@ q = Queue(connection=conn)
 
 
 def add_search_jobs():
-    probe_list = probes.get_probe_list()
+    probe_list = probes.get_watched_search_list()
 
     search_job_count = 0
 
