@@ -57,8 +57,8 @@ def store_snapshot(service):
         'name': service['name'],
         'type': service['type']['name'],
         'postCode': service['postcode'],
-        'easting': service['easting'],
-        'northing': service['northing'],
+        'easting': int(service['easting']),
+        'northing': int(service['northing']),
         'snapshotTime': datetime.datetime.utcnow(),
         'capacity': {
             'status': service['capacity']['status']['human'],
