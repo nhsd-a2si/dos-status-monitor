@@ -37,10 +37,10 @@
         },
         "certifi": {
             "hashes": [
-                "sha256:244be0d93b71e93fc0a0a479862051414d0e00e16435707e5bf5000f92e04694",
-                "sha256:5ec74291ca1136b40f0379e1128ff80e866597e4e2c1e755739a913bbc3613c0"
+                "sha256:14131608ad2fd56836d33a71ee60fa1c82bc9d2c8d98b7bdbc631fe1b3cd1296",
+                "sha256:edbc3f203427eef571f79a7692bb160a2b0f7ccaa31953e99bd17e307cf63f7d"
             ],
-            "version": "==2017.11.5"
+            "version": "==2018.1.18"
         },
         "chardet": {
             "hashes": [
@@ -259,10 +259,10 @@
         },
         "twilio": {
             "hashes": [
-                "sha256:3636d77e9aede9598a8b0773b3aa00b0dd4343b98443ac4663a2ad3a807bc212",
-                "sha256:c1d356ede81da53dd87646d1baa2c5a2ea6e3d28454e2b9f3bcda611d7fed1c7"
+                "sha256:be6fd048b419ab975266497eccf58404ddc1d24caea9a9afea439c0c334aa214",
+                "sha256:15f07e0cdffd2adb5942190fe8e198e4991ec9b563ecd318b13783ea685a327a"
             ],
-            "version": "==6.10.0"
+            "version": "==6.10.1"
         },
         "urllib3": {
             "hashes": [
