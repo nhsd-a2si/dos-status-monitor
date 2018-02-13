@@ -11,13 +11,14 @@ s.auth = (config.UEC_DOS_USERNAME,
 def get_services_by_service_search(postcode: str,
                                    search_distance: int,
                                    service_types: list,
-                                   number_per_type: int) -> dict:
+                                   number_per_type: int,
+                                   gp: str) -> dict:
 
     time.sleep(0.5)
 
     url = f'{config.UEC_DOS_BASE_URL}/app/controllers/api/v1.0/' \
           f'services/byServiceType/CAPMON/{postcode}/{search_distance}/' \
-          f'0/0/0/0/{service_types}/{number_per_type}'
+          f'{gp}/0/0/0/{service_types}/{number_per_type}'
     
     r = s.get(url)
     data = r.json()
