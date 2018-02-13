@@ -225,17 +225,17 @@ def snapshot_single_service(service_id):
     if service:
         store_snapshot(service)
 
-    try:
-        logger.debug(f"{service_id} - {service['name']}")
+        try:
+            logger.debug(f"{service_id} - {service['name']}")
 
-        # Only store snapshots and queue status checks if the status has a value
-        if service['capacity']['status']['human'] != "":
-            logger.debug('Queueing capacity check for {service_id}')
+            # Only store snapshots and queue status checks if the status has a value
+            if service['capacity']['status']['human'] != "":
+                logger.debug('Queueing capacity check for {service_id}')
 
-            q.enqueue(has_status_changed,
-                      service['id'])
-        else:
-            logger.debug("Empty capacity - skipping status check")
+                q.enqueue(has_status_changed,
+                          service['id'])
+            else:
+                logger.debug("Empty capacity - skipping status check")
 
-    except IndexError:
-        logger.exception('Service not found')
+        except IndexError:
+            logger.exception('Service not found')
