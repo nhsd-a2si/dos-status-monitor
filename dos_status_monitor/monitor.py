@@ -185,33 +185,39 @@ def snapshot_service_search(probe):
     number_per_type = probe['number_per_type']
     gp = probe['gp']
 
-    start = time.time()
-    services = uec_dos.get_services_by_service_search(postcode,
-                                                      search_distance,
-                                                      service_types,
-                                                      number_per_type,
-                                                      gp)
-    roundtrip = time.time() - start
+    try:
+        start = time.time()
+        services = uec_dos.get_services_by_service_search(postcode,
+                                                          search_distance,
+                                                          service_types,
+                                                          number_per_type,
+                                                          gp)
+        round_trip = time.time() - start
 
-    logger.info(f"Ran probe for {postcode}, at {search_distance} "
-                f"miles, for {number_per_type} each of service types: "
-                f"{service_types} - {len(services)} services (Took {roundtrip})")
+        logger.info(f"Ran probe for {postcode}, at {search_distance} "
+                    f"miles, for {number_per_type} each of service types: "
+                    f"{service_types} - {len(services)} services (Took {round_trip})")
 
-    for service in services:
+        for service in services:
 
-        store_snapshot(service)
+            store_snapshot(service)
 
-        service_id = service['id']
+            service_id = service['id']
 
-        # Only store snapshots and queue status checks if the status has a value
-        if service['capacity']['status']['human'] != "":
-            logger.debug('Queueing capacity check for {service_id}')
+            # Only store snapshots and queue status checks if the status has a value
+            if service['capacity']['status']['human'] != "":
+                logger.debug('Queueing capacity check for {service_id}')
 
-            q.enqueue(has_status_changed,
-                      service_id)
-        else:
-            logger.debug("Empty capacity - skipping status check")
-            update_status_from_latest_snapshot(service_id)
+                q.enqueue(has_status_changed,
+                          service_id)
+            else:
+                logger.debug("Empty capacity - skipping status check")
+                update_status_from_latest_snapshot(service_id)
+
+    except Exception as e:
+        logger.exception(f"Error whilst running probe for {postcode}, at {search_distance} "
+                         f"miles, for {number_per_type} each of service types: "
+                         f"{service_types}")
 
 
 def snapshot_single_service(service_id):
