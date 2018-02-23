@@ -26,9 +26,9 @@ def get_services_by_service_search(postcode: str,
         services = data['success']['services']
         return services
     elif r.status_code == 401:
-        raise requests.RequestException(f"Authentication Denied")
+        raise requests.RequestException(f"{r.status_code} - Authentication Denied")
     else:
-        raise requests.RequestException("Request failed")
+        raise requests.RequestException(f"{r.status_code} - Request failed")
     
 
 def get_service_by_service_id(service_id: str) -> dict:
