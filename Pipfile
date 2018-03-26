@@ -22,6 +22,7 @@ gunicorn = "*"
 flask-basicauth = "*"
 flask-cors = "*"
 raven = "*"
+dnspython = "*"
 
 
 [requires]
