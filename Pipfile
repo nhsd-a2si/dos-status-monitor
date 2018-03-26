@@ -14,7 +14,7 @@ requests = "*"
 twilio = "*"
 schedule = "*"
 rq = "*"
-pymongo = {extras = ["tls"]}
+pymongo = {extras = ["tls", "srv"]}
 pytest = "*"
 rollbar = "*"
 flask = "*"
