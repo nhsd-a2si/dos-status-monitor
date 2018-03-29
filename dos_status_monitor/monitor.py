@@ -4,6 +4,7 @@ import redis
 from rq import Queue
 
 from dos_status_monitor import database, uec_dos, config, slack, logger, sms
+from dos_status_monitor import utils
 
 # Set up RQ queue
 conn = redis.from_url(config.REDIS_URL)
@@ -132,8 +133,9 @@ def has_status_changed(service_id):
                         f"({service_rag})")
 
             # Fix the incorrect service_updated_time by subtracting an hour from the supplied time.
+            # Below line needs to be included when in BST
             # TODO: Remove this fix when the API is fixed to return the correct local time
-            # service_updated_time = utils.remove_1_hour_from_time_string(service_updated_time)
+            service_updated_time = utils.remove_1_hour_from_time_string(service_updated_time)
 
             document = {'id': service_id,
                         'name': service_name,
