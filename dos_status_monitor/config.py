@@ -36,10 +36,6 @@ TWILIO_FROM_NUMBER = os.environ.get('TWILIO_FROM_NUMBER')
 MOBILE_NUMBER = os.environ.get('MOBILE_NUMBER')
 SMS_ENABLED = config_string_to_bool(os.environ.get('SMS_ENABLED', ''))
 
-# Monitor Settings
-# e.g. "POSTCODE:DISTANCE:TYPES:NUMBER|POSTCODE:DIST:TYPES:NUMBER"
-PROBE_LIST = os.environ.get('PROBE_LIST', '')
-
 ROLLBAR_ACCESS_TOKEN = os.environ.get('ROLLBAR_ACCESS_TOKEN', '')
 
 # Basic Auth Settings
