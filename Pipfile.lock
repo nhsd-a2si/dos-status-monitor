@@ -253,10 +253,10 @@
         },
         "twilio": {
             "hashes": [
-                "sha256:1a17380f92f1147bfe251886e69c76f2c75fdfd88778b6f0bae60e94efd8fd42",
-                "sha256:7713a02356fbe5d1799d5b0387b6103bf8d660170c48855206271dec4e48bec9"
+                "sha256:2210b38d75099ad1a53dce64a32fff3a68199b592400b6b17a0479ea6a9a93a9",
+                "sha256:52a6a99b473a274ef088baebf76529c38d0c65be5495a291f4fa2270c1e5d4aa"
             ],
-            "version": "==6.12.1"
+            "version": "==6.13.0"
         },
         "urllib3": {
             "hashes": [
