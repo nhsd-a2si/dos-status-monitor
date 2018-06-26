@@ -1,13 +1,28 @@
-import datetime
+from datetime import datetime, timedelta
+from pytz import reference
 
 
-def remove_1_hour_from_time_string(current_time: str) -> str:
+def is_bst(time_tup):
+    return reference.LocalTimezone().tzname(time_tup) == 'BST'
+
+
+def adjust_timestamp_for_api_bst_bug(updated_time: str,
+                                     updated_date: str) -> (str, str):
     """
     Take a time represented as HH:MM string, and return the same format string with 1 hour subtracted
-    :param current_time: str
+    :param updated_time: str
+    :param updated_date: str
     :return new_time: str
     """
-    time_tup = datetime.datetime.strptime(current_time, '%H:%M')
-    new_time = time_tup - datetime.timedelta(hours=1)
-    return datetime.datetime.strftime(new_time, '%H:%M')
 
+    # The bug only happens during BST
+    combined_time = f"{updated_time}-{updated_date}"
+    time_tup = datetime.strptime(combined_time, '%H:%M-%d/%m/%Y')
+    if is_bst(time_tup):
+        new_combined_time = time_tup - timedelta(hours=1)
+        new_time = datetime.strftime(new_combined_time, '%H:%M')
+        new_date = datetime.strftime(new_combined_time, '%d/%m/%Y')
+        return new_time, new_date
+
+    else:
+        return updated_time, updated_date

@@ -135,7 +135,7 @@ def has_status_changed(service_id):
             # Fix the incorrect service_updated_time by subtracting an hour from the supplied time.
             # Below line needs to be included when in BST
             # TODO: Remove this fix when the API is fixed to return the correct local time
-            service_updated_time = utils.remove_1_hour_from_time_string(service_updated_time)
+            service_updated_time = utils.adjust_timestamp_for_api_bst_bug(service_updated_time, service_updated_date)
 
             document = {'id': service_id,
                         'name': service_name,
