@@ -18,11 +18,14 @@ def adjust_timestamp_for_api_bst_bug(updated_time: str,
     # The bug only happens during BST
     combined_time = f"{updated_time}-{updated_date}"
     time_tup = datetime.strptime(combined_time, '%H:%M-%d/%m/%Y')
+
     if is_bst(time_tup):
+        print("Is BST")
         new_combined_time = time_tup - timedelta(hours=1)
         new_time = datetime.strftime(new_combined_time, '%H:%M')
         new_date = datetime.strftime(new_combined_time, '%d/%m/%Y')
         return new_time, new_date
 
     else:
+        print("Not BST")
         return updated_time, updated_date
