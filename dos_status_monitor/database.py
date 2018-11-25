@@ -117,7 +117,7 @@ def add_watched_service(service_id):
     logger.debug(f'Adding watch for service {service_id}')
     query = {'id': service_id}
     update = {'id': service_id}
-    r = watched_services.update(query, update, upsert=True)
+    r = watched_services.replace_one(query, update, upsert=True)
     return r
 
 
