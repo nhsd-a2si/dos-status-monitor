@@ -1,4 +1,4 @@
-# DoS Capacity Status Notifier
+# DoS Capacity Status Notifier v0.3
 
 ## Overview
 This is a simple tool which makes use of the DoS REST API.
