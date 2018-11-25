@@ -1,15 +1,12 @@
 [[source]]
-
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 
-
 [dev-packages]
-
 pytest = "*"
+pylint = "*"
 
 [packages]
-
 requests = "*"
 twilio = "*"
 schedule = "*"
@@ -24,7 +21,5 @@ flask-cors = "*"
 raven = "*"
 dnspython = "*"
 
-
 [requires]
-
 python_version = "3.6.7"
