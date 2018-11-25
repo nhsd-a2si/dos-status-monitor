@@ -3,16 +3,23 @@ url = "https://pypi.python.org/simple"
 verify_ssl = true
 
 [dev-packages]
+pytest = "*"
+pylint = "*"
 
 [packages]
-
 requests = "*"
 twilio = "*"
 schedule = "*"
+redis = "==2.10.6"
 rq = "*"
-pymongo = {extras = ["tls"]}
-pytest = "*"
-
+pymongo = {extras = ["tls", "srv"]}
+rollbar = "*"
+flask = "*"
+gunicorn = "*"
+flask-basicauth = "*"
+flask-cors = "*"
+raven = "*"
+dnspython = "*"
 
 [requires]
-python_version = "3.6"
+python_version = "3.6.7"

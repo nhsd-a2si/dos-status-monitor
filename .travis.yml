@@ -1,1 +1,17 @@
 language: python
+python:
+  - "3.6"
+  - "3.7-dev"
+  - "nightly"
+services:
+  - mongodb
+  - redis-server
+env:
+  - APP_NAME=travis-ci
+before_install:
+  - export TZ=Europe/London
+  - pip install pipenv
+install:
+  - pipenv install --dev
+script:
+  - pipenv run pytest
