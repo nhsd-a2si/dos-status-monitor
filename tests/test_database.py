@@ -16,26 +16,28 @@ def watched_services(db):
 
 def clear_and_verify_empty(watched_services):
     watched_services.delete_many({})
-    results = watched_services.find({})
-    assert results.count() == 0
+    filter = {}
+    assert watched_services.count_documents(filter) == 0
 
 def test_add_service_to_watchlist(watched_services):
     clear_and_verify_empty(watched_services)
     test_id = '12345'
     database.add_watched_service(test_id)
-    results = watched_services.find({'id': test_id})
+    filter = {'id': test_id}
+    assert watched_services.count_documents(filter) == 1
+    results = watched_services.find(filter)
     result = results[0]
-    assert results.count() == 1
     assert result['id'] == test_id
 
 def test_remove_service_from_watchlist(watched_services):
     test_id = '123456'
     watched_services.insert_one({'id': test_id})
-    results = watched_services.find({'id': test_id})
-    assert results.count() == 1
+    filter = {'id': test_id}
+    assert watched_services.count_documents(filter) == 1
+    results = watched_services.find(filter)
     assert results[0]['id'] == test_id
 
     database.remove_watched_service(test_id)
-    results = watched_services.find({'id': test_id})
-    assert results.count() == 0
+    filter = {'id': test_id}
+    assert watched_services.count_documents(filter) == 0
 
