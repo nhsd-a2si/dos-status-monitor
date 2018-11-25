@@ -1,5 +1,9 @@
 # DoS Capacity Status Notifier v0.3
 
+## Build Status
+**`master` -->** [![Build Status](https://travis-ci.org/nhsd-a2si/dos-status-monitor.svg?branch=master)](https://travis-ci.org/nhsd-a2si/dos-status-monitor)  
+**`develop` -->** [![Build Status](https://travis-ci.org/nhsd-a2si/dos-status-monitor.svg?branch=develop)](https://travis-ci.org/nhsd-a2si/dos-status-monitor)
+
 ## Overview
 This is a simple tool which makes use of the DoS REST API.
 
