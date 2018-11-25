@@ -6,16 +6,16 @@ verify_ssl = true
 
 [dev-packages]
 
-
+pytest = "*"
 
 [packages]
 
 requests = "*"
 twilio = "*"
 schedule = "*"
+redis = "==2.10.6"
 rq = "*"
 pymongo = {extras = ["tls", "srv"]}
-pytest = "*"
 rollbar = "*"
 flask = "*"
 gunicorn = "*"
@@ -27,4 +27,4 @@ dnspython = "*"
 
 [requires]
 
-python_version = "3.6"
+python_version = "3.6.7"
