@@ -15,3 +15,7 @@ v0.2
 * Disable SMS notifications as not an essential feature
 * Update dependencies and tests
 * Update Python runtime to 3.6.7
+
+v0.3
+----
+* Replace deprecated MongoDB functions
