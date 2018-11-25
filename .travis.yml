@@ -3,7 +3,6 @@ python:
   - "3.6"
   - "3.7-dev"
   - "nightly"
-  - "pypy3"
 services:
   - mongodb
   - redis-server
