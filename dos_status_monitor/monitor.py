@@ -187,6 +187,7 @@ def snapshot_service_search(probe):
     service_types = probe['service_types']
     number_per_type = probe['number_per_type']
     gp = probe['gp']
+    search_role = probe['search_role']
 
     try:
         start = time.time()
@@ -194,10 +195,11 @@ def snapshot_service_search(probe):
                                                           search_distance,
                                                           service_types,
                                                           number_per_type,
-                                                          gp)
+                                                          gp,
+                                                          search_role)
         round_trip = time.time() - start
 
-        logger.info(f"Ran probe for {postcode}, at {search_distance} "
+        logger.info(f"Ran probe for {postcode} as {search_role}, at {search_distance} "
                     f"miles, for {number_per_type} each of service types: "
                     f"{service_types} - {len(services)} services (Took {round_trip})")
 
@@ -223,13 +225,13 @@ def snapshot_service_search(probe):
                          f"{service_types}")
 
 
-def snapshot_single_service(service_id):
+def snapshot_single_service(service_id, search_role):
 
     start = time.time()
-    service = uec_dos.get_service_by_service_id(service_id)
-    roundtrip = time.time() - start
+    service = uec_dos.get_service_by_service_id(service_id, search_role)
+    round_trip_time = time.time() - start
 
-    logger.info(f"Ran probe for {service_id} (Took {roundtrip})")
+    logger.info(f"Ran probe for {service_id} as {search_role} (Took {round_trip_time})")
 
     if service:
         store_snapshot(service)

@@ -12,9 +12,14 @@ MONGODB_URI - A connection URI for (e.g. `mongodb://username:password@localhost:
 REDIS_URL - A connection URI for Redis instance to be used for job queue (e.g. `redis://username:password@localhost:6379`)
 
 #### UEC DoS API Settings
-UEC_DOS_USERNAME - The username to use when connecting to the DoS REST API  
-UEC_DOS_PASSWORD - The password to use when connecting to the DoS REST API  
-UEC_DOS_BASE_URL - The base URL to use for the DoS REST API (e.g. https://uat.dos.nhs.uk)  
+UEC_DOS_BASE_URL - The base URL to use for the DoS REST API (e.g. https://uat.dos.nhs.uk)
+
+UEC_DOS_USERNAME - Username for API account with PATHWAYS_REFERRAL search role
+UEC_DOS_PASSWORD - Password for API account with PATHWAYS_REFERRAL search role
+
+UEC_DOS_USERNAME_DIGITAL - Username for API account with DIGITAL_REFERRAL search role
+UEC_DOS_PASSWORD_DIGITAL - Password for API account with DIGITAL_REFERRAL search role  
+  
 
 #### SMS Settings
 TWILIO_ACCOUNT_SID - The Account SID for sending SMS via Twilio    
