@@ -10,7 +10,7 @@ pylint = "*"
 requests = "*"
 twilio = "*"
 schedule = "*"
-redis = "==2.10.6"
+redis = "==3.2.0"
 rq = "*"
 pymongo = {extras = ["tls", "srv"]}
 rollbar = "*"
