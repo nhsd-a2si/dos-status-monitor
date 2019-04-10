@@ -25,7 +25,10 @@ def add_snapshot(document):
         snapshots.insert(document)
         logger.debug(f"Added snapshot for {document['id']}")
     except errors.WriteError:
-        logger.error("Unable to write snapshot to database")
+        logger.error("Error writing snapshot to database")
+    except errors.OperationFailure as e:
+        if "over your space quota" in str(e):
+            logger.error("Error writing snapshot to database - no database quota remaining")
 
 
 def update_status(document):

@@ -13,6 +13,7 @@ q = Queue(connection=conn)
 
 
 def add_search_jobs():
+
     probe_list = probes.get_watched_search_list()
 
     search_job_count = 0
@@ -28,15 +29,18 @@ def add_search_jobs():
 
 
 def add_service_jobs():
+
     service_list = probes.get_watched_service_list()
 
     service_job_count = 0
 
     for service in service_list:
-        service_id = service['id']
+
         q.enqueue(monitor.snapshot_single_service,
-                  service_id,
+                  service['id'],
+                  service['search_role'],
                   ttl=f'{config.CHECK_RATE_MINUTES}m')
+
         service_job_count += 1
 
     logger.info(f"{service_job_count} service probes configured to "
@@ -44,11 +48,17 @@ def add_service_jobs():
 
 
 def add_service_status_job():
-    q.enqueue(slack.send_slack_status_update,
-              ttl=f'{config.STATUS_UPDATE_RATE_MINUTES}m')
 
-    logger.info("Slack Status Summary will run every "
-                f"{config.STATUS_UPDATE_RATE_MINUTES} minute(s).")
+    if config.SLACK_ENABLED:
+
+        q.enqueue(slack.send_slack_status_update,
+                  ttl=f'{config.STATUS_UPDATE_RATE_MINUTES}m')
+
+        logger.info("Slack Status Summary will run every "
+                    f"{config.STATUS_UPDATE_RATE_MINUTES} minute(s).")
+
+    else:
+        return
 
 
 add_search_jobs()

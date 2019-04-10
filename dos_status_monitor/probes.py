@@ -12,7 +12,8 @@ def get_watched_search_list():
             'search_distance': str(int(search['search_distance'])),
             'service_types': ",".join(search['search_service_types']),
             'number_per_type': str(int(search['search_results_limit'])),
-            'description': search['description']
+            'description': search['description'],
+            'search_role': search['search_role']
         }
         new_search_list.append(probe)
 
@@ -22,5 +23,3 @@ def get_watched_search_list():
 def get_watched_service_list():
     service_list = database.get_watched_services()
     return list(service_list)
-
-
