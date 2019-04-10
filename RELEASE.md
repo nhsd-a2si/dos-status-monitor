@@ -19,3 +19,8 @@ v0.2
 v0.3
 ----
 * Replace deprecated MongoDB functions
+
+v0.4
+----
+* Fix a bug with services using Digital Referral roles
+* Improved error handling for database quota errors
