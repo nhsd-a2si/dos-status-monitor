@@ -118,6 +118,10 @@ def has_status_changed(service_id):
             # contains details of the person who changed the status
             service_data = uec_dos.get_service_by_service_id(service_id)
 
+            if not service_data:
+                logger.error("No service information retrieved from DoS")
+                return
+
             service_updated_by = service_data['capacity']['updated']['by']
             service_status = service_data['capacity']['status']['human']
             service_rag = service_data['capacity']['status']['rag']

@@ -53,16 +53,23 @@ def get_service_by_service_id(service_id: str,
     # This is to make sure we don't spam the DoS API with more than 2 requests per second.
     time.sleep(0.5)
 
-    s = get_session(search_role)
+    pathways_session = get_session('PATHWAYS_REFERRAL')
+    digital_session = get_session('DIGITAL_REFERRAL')
 
     url = f'{config.UEC_DOS_BASE_URL}/app/controllers/api/v1.0/' \
           f'services/byServiceId/{service_id}'
-    result = s.get(url)
+    result = pathways_session.get(url)
     service_json = result.json()
+
+    if service_json['success']['serviceCount'] == 0:
+        logger.debug("Trying Digital Referral search role")
+        result = digital_session.get(url)
+        service_json = result.json()
 
     try:
         service = service_json['success']['services'][0]
         return service
 
     except IndexError:
-        logger.exception('Service not found')
+        logger.exception('Service not found in JSON response')
+        return None
