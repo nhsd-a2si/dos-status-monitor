@@ -5,6 +5,7 @@ from rq import Queue
 
 from dos_status_monitor import monitor, probes, config, slack
 from dos_status_monitor import logger
+from dos_status_monitor import housekeeping
 
 
 # Set up RQ queue
@@ -61,9 +62,16 @@ def add_service_status_job():
         return
 
 
+def add_housekeeping_jobs():
+
+    q.enqueue(housekeeping.get_old_snapshots)
+    logger.info(f"Housekeeping jobs configured to run every 5 minutes.")
+
+
 add_search_jobs()
 add_service_jobs()
 add_service_status_job()
+add_housekeeping_jobs()
 
 # Set up the scheduled jobs
 schedule.every(config.CHECK_RATE_MINUTES).minutes\
@@ -72,6 +80,8 @@ schedule.every(config.CHECK_RATE_MINUTES).minutes\
     .do(add_service_jobs)
 schedule.every(config.STATUS_UPDATE_RATE_MINUTES).minutes\
     .do(add_service_status_job)
+schedule.every(5).minutes\
+    .do(add_housekeeping_jobs)
 
 while True:
     logger.info(f"Tick!")
