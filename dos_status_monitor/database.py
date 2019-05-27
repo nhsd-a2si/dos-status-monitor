@@ -8,11 +8,11 @@ client = MongoClient(config.MONGODB_URI)
 db = client.get_database()
 
 # Set up collections
-snapshots = db['snapshots']
-changes = db['changes']
-statuses = db['statuses']
-watched_services = db['watched_services']
-watched_searches = db['watched_searches']
+snapshots = db["snapshots"]
+changes = db["changes"]
+statuses = db["statuses"]
+watched_services = db["watched_services"]
+watched_searches = db["watched_searches"]
 
 
 def add_change(document):
@@ -28,12 +28,14 @@ def add_snapshot(document):
         logger.error("Error writing snapshot to database")
     except errors.OperationFailure as e:
         if "over your space quota" in str(e):
-            logger.error("Error writing snapshot to database - no database quota remaining")
+            logger.error(
+                "Error writing snapshot to database - no database quota remaining"
+            )
 
 
 def update_status(document):
-    query = {'id': document['id']}
-    update = {'$set': document}
+    query = {"id": document["id"]}
+    update = {"$set": document}
     try:
         r = statuses.update_one(query, update, upsert=True)
         logger.debug(f"Updated status for {document['id']}")
@@ -46,8 +48,10 @@ def update_status(document):
 def get_most_recent_snapshot_for_service(service_id):
     # TODO: Fix so it doesn't throw an error if there's only one previous snapshot
     logger.debug("Getting latest snapshot from database")
-    query = {'id': service_id, 'source': config.APP_NAME}
-    results = snapshots.find(query).sort([('snapshotTime', pymongo.DESCENDING)]).limit(1)
+    query = {"id": service_id, "source": config.APP_NAME}
+    results = (
+        snapshots.find(query).sort([("snapshotTime", pymongo.DESCENDING)]).limit(1)
+    )
     result = results[0]
     return result
 
@@ -69,12 +73,12 @@ def get_watched_searches():
 def get_all_statuses():
     logger.debug("Getting all service statuses")
 
-    projection = {'_id': False}
-    results = statuses.find(projection=projection)\
-        .sort([('capacity', pymongo.DESCENDING)])
+    projection = {"_id": False}
+    results = statuses.find(projection=projection).sort(
+        [("capacity", pymongo.DESCENDING)]
+    )
 
-    result_list = [result for result in results
-                   if result['capacity'] != ""]
+    result_list = [result for result in results if result["capacity"] != ""]
 
     return result_list
 
@@ -82,7 +86,7 @@ def get_all_statuses():
 def get_all_postcodes():
     logger.debug("Getting all service postcodes")
 
-    projection = {'_id': False}
+    projection = {"_id": False}
     results = statuses.find(projection=projection)
 
     result_list = [result for result in results]
@@ -93,39 +97,41 @@ def get_all_postcodes():
 def get_low_statuses():
     logger.debug("Getting low service statuses")
 
-    projection = {'_id': False}
-    results = statuses.find(projection=projection)\
-        .sort([('capacity', pymongo.DESCENDING)])
+    projection = {"_id": False}
+    results = statuses.find(projection=projection).sort(
+        [("capacity", pymongo.DESCENDING)]
+    )
 
-    result_list = [result for result in results
-                   if result['capacity'] not in ('', 'HIGH')]
+    result_list = [
+        result for result in results if result["capacity"] not in ("", "HIGH")
+    ]
 
     return result_list
 
 
 def get_status_for_single_service(service_id):
     logger.debug(f"Getting status for single service {service_id}")
-    query = {'id': service_id}
-    projection = {'id': True, 'capacity': True, 'rag': True}
+    query = {"id": service_id}
+    projection = {"id": True, "capacity": True, "rag": True}
     result = statuses.find_one(query, projection=projection)
     try:
         return result
 
     except TypeError:
-        logger.debug(f'No status found for {service_id}')
+        logger.debug(f"No status found for {service_id}")
         return None
 
 
 def add_watched_service(service_id):
-    logger.debug(f'Adding watch for service {service_id}')
-    query = {'id': service_id}
-    update = {'id': service_id}
+    logger.debug(f"Adding watch for service {service_id}")
+    query = {"id": service_id}
+    update = {"id": service_id}
     r = watched_services.replace_one(query, update, upsert=True)
     return r
 
 
 def remove_watched_service(service_id):
-    logger.debug(f'Removing watch for service {service_id}')
-    query = {'id': service_id}
+    logger.debug(f"Removing watch for service {service_id}")
+    query = {"id": service_id}
     r = watched_services.delete_many(query)
     return r

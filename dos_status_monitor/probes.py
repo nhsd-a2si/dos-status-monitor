@@ -7,13 +7,13 @@ def get_watched_search_list():
 
     for search in search_list:
         probe = {
-            'postcode': search['search_postcode'],
-            'gp': search['search_gp'],
-            'search_distance': str(int(search['search_distance'])),
-            'service_types': ",".join(search['search_service_types']),
-            'number_per_type': str(int(search['search_results_limit'])),
-            'description': search['description'],
-            'search_role': search['search_role']
+            "postcode": search["search_postcode"],
+            "gp": search["search_gp"],
+            "search_distance": str(int(search["search_distance"])),
+            "service_types": ",".join(search["search_service_types"]),
+            "number_per_type": str(int(search["search_results_limit"])),
+            "description": search["description"],
+            "search_role": search["search_role"],
         }
         new_search_list.append(probe)
 

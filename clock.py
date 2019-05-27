@@ -20,13 +20,15 @@ def add_search_jobs():
     search_job_count = 0
 
     for probe in probe_list:
-        q.enqueue(monitor.snapshot_service_search,
-                  probe,
-                  ttl=f'{config.CHECK_RATE_MINUTES}m')
+        q.enqueue(
+            monitor.snapshot_service_search, probe, ttl=f"{config.CHECK_RATE_MINUTES}m"
+        )
         search_job_count += 1
 
-    logger.info(f"{search_job_count} search probes configured to "
-                f"run every {config.CHECK_RATE_MINUTES} minute(s).")
+    logger.info(
+        f"{search_job_count} search probes configured to "
+        f"run every {config.CHECK_RATE_MINUTES} minute(s)."
+    )
 
 
 def add_service_jobs():
@@ -37,26 +39,33 @@ def add_service_jobs():
 
     for service in service_list:
 
-        q.enqueue(monitor.snapshot_single_service,
-                  service['id'],
-                  service['search_role'],
-                  ttl=f'{config.CHECK_RATE_MINUTES}m')
+        q.enqueue(
+            monitor.snapshot_single_service,
+            service["id"],
+            service["search_role"],
+            ttl=f"{config.CHECK_RATE_MINUTES}m",
+        )
 
         service_job_count += 1
 
-    logger.info(f"{service_job_count} service probes configured to "
-                f"run every {config.CHECK_RATE_MINUTES} minute(s).")
+    logger.info(
+        f"{service_job_count} service probes configured to "
+        f"run every {config.CHECK_RATE_MINUTES} minute(s)."
+    )
 
 
 def add_service_status_job():
 
     if config.SLACK_ENABLED:
 
-        q.enqueue(slack.send_slack_status_update,
-                  ttl=f'{config.STATUS_UPDATE_RATE_MINUTES}m')
+        q.enqueue(
+            slack.send_slack_status_update, ttl=f"{config.STATUS_UPDATE_RATE_MINUTES}m"
+        )
 
-        logger.info("Slack Status Summary will run every "
-                    f"{config.STATUS_UPDATE_RATE_MINUTES} minute(s).")
+        logger.info(
+            "Slack Status Summary will run every "
+            f"{config.STATUS_UPDATE_RATE_MINUTES} minute(s)."
+        )
 
     else:
         return
@@ -74,14 +83,10 @@ add_service_status_job()
 add_housekeeping_jobs()
 
 # Set up the scheduled jobs
-schedule.every(config.CHECK_RATE_MINUTES).minutes\
-    .do(add_search_jobs)
-schedule.every(config.CHECK_RATE_MINUTES).minutes\
-    .do(add_service_jobs)
-schedule.every(config.STATUS_UPDATE_RATE_MINUTES).minutes\
-    .do(add_service_status_job)
-schedule.every(5).minutes\
-    .do(add_housekeeping_jobs)
+schedule.every(config.CHECK_RATE_MINUTES).minutes.do(add_search_jobs)
+schedule.every(config.CHECK_RATE_MINUTES).minutes.do(add_service_jobs)
+schedule.every(config.STATUS_UPDATE_RATE_MINUTES).minutes.do(add_service_status_job)
+schedule.every(5).minutes.do(add_housekeeping_jobs)
 
 while True:
     logger.info(f"Tick!")

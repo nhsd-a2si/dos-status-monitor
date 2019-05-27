@@ -5,12 +5,15 @@ verify_ssl = true
 [dev-packages]
 pytest = "*"
 pylint = "*"
+black = "*"
+mypy = "*"
+flake8 = "*"
 
 [packages]
 requests = "*"
 twilio = "*"
 schedule = "*"
-redis = "==2.10.6"
+redis = "*"
 rq = "*"
 pymongo = {extras = ["tls", "srv"]}
 rollbar = "*"
@@ -22,4 +25,4 @@ raven = "*"
 dnspython = "*"
 
 [requires]
-python_version = "3.6.7"
+python_version = "3.7.3"

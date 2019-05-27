@@ -9,7 +9,7 @@ client = MongoClient(config.MONGODB_URI)
 db = client.get_database()
 
 # Set up collections
-snapshots = db['snapshots']
+snapshots = db["snapshots"]
 
 
 # Get week's worth of snapshots
@@ -22,8 +22,9 @@ def get_old_snapshots():
             pprint.pprint(result)
 
     except TypeError:
-        logger.debug(f'No snapshots found')
+        logger.debug(f"No snapshots found")
         return None
+
 
 # TODO: Save snapshots to temporary CSV
 

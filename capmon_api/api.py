@@ -8,14 +8,14 @@ cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 from dos_status_monitor import database, logger, config
 
-app.config['BASIC_AUTH_USERNAME'] = config.BASIC_AUTH_USERNAME
-app.config['BASIC_AUTH_PASSWORD'] = config.BASIC_AUTH_PASSWORD
-app.config['BASIC_AUTH_FORCE'] = config.BASIC_AUTH_FORCE
+app.config["BASIC_AUTH_USERNAME"] = config.BASIC_AUTH_USERNAME
+app.config["BASIC_AUTH_PASSWORD"] = config.BASIC_AUTH_PASSWORD
+app.config["BASIC_AUTH_FORCE"] = config.BASIC_AUTH_FORCE
 
 basic_auth = BasicAuth(app)
 
 
-@app.route('/statuses')
+@app.route("/statuses")
 def get_statuses():
     statuses = database.get_low_statuses()
     count = len(statuses)
@@ -23,7 +23,7 @@ def get_statuses():
     return jsonify(statuses)
 
 
-@app.route('/coverage_data')
+@app.route("/coverage_data")
 def get_coverage_data():
     statuses = database.get_all_postcodes()
     count = len(statuses)
@@ -31,20 +31,17 @@ def get_coverage_data():
     return jsonify(statuses)
 
 
-@app.route('/map')
+@app.route("/map")
 def status_map():
     api_key = config.GOOGLE_MAPS_API_KEY
-    return render_template('index.html',
-                           api_key=api_key)
+    return render_template("index.html", api_key=api_key)
 
 
-@app.route('/coverage')
+@app.route("/coverage")
 def coverage_map():
     api_key = config.GOOGLE_MAPS_API_KEY
-    return render_template('coverage_map.html',
-                           api_key=api_key)
+    return render_template("coverage_map.html", api_key=api_key)
 
 
-if __name__ == '__main__':
-    app.run(debug=True,
-            host='0.0.0.0')
+if __name__ == "__main__":
+    app.run(debug=True, host="0.0.0.0")
