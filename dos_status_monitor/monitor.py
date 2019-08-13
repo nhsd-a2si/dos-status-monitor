@@ -215,6 +215,7 @@ def snapshot_service_search(probe):
         )
         database.add_metric(
             {
+                "eventTime": datetime.datetime.utcnow(),
                 "type": "service_search",
                 "postcode": postcode,
                 "search_distance": int(search_distance),
@@ -258,6 +259,7 @@ def snapshot_single_service(service_id, search_role):
     logger.info(f"Ran probe for {service_id} as {search_role} (Took {round_trip_time})")
     database.add_metric(
         {
+            "eventTime": datetime.datetime.utcnow(),
             "type": "single_service",
             "service_id": service_id,
             "total_time": float("{0:.2f}".format(round_trip_time)),
