@@ -213,19 +213,20 @@ def snapshot_service_search(probe):
             f"miles, for {number_per_type} each of service types: "
             f"{service_types} - {len(services)} services (Took {round_trip_time})"
         )
-        database.add_metric(
-            {
-                "eventTime": datetime.datetime.utcnow(),
-                "type": "service_search",
-                "postcode": postcode,
-                "search_distance": int(search_distance),
-                "service_types": service_types,
-                "number_per_type": int(number_per_type),
-                "gp": gp,
-                "search_role": search_role,
-                "total_time": float("{0:.2f}".format(round_trip_time)),
-            }
-        )
+
+        document = {
+            "eventTime": datetime.datetime.utcnow(),
+            "type": "service_search",
+            "postcode": postcode,
+            "search_distance": int(search_distance),
+            "service_types": service_types,
+            "number_per_type": int(number_per_type),
+            "gp": gp,
+            "search_role": search_role,
+            "total_time": float("{0:.2f}".format(round_trip_time)),
+        }
+
+        database.add_metric(document)
 
         for service in services:
 
@@ -257,14 +258,15 @@ def snapshot_single_service(service_id, search_role):
     round_trip_time = time.time() - start
 
     logger.info(f"Ran probe for {service_id} as {search_role} (Took {round_trip_time})")
-    database.add_metric(
-        {
-            "eventTime": datetime.datetime.utcnow(),
-            "type": "single_service",
-            "service_id": service_id,
-            "total_time": float("{0:.2f}".format(round_trip_time)),
-        }
-    )
+
+    document = {
+        "eventTime": datetime.datetime.utcnow(),
+        "type": "single_service",
+        "service_id": service_id,
+        "total_time": float("{0:.2f}".format(round_trip_time)),
+    }
+
+    database.add_metric(document)
 
     if service:
         store_snapshot(service)
