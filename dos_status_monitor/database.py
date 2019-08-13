@@ -13,6 +13,7 @@ changes = db["changes"]
 statuses = db["statuses"]
 watched_services = db["watched_services"]
 watched_searches = db["watched_searches"]
+metrics = db["metrics"]
 
 
 def add_change(document):
@@ -135,3 +136,7 @@ def remove_watched_service(service_id):
     query = {"id": service_id}
     r = watched_services.delete_many(query)
     return r
+
+
+def add_metric(document):
+    metrics.insert(document)

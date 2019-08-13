@@ -213,6 +213,17 @@ def snapshot_service_search(probe):
             f"miles, for {number_per_type} each of service types: "
             f"{service_types} - {len(services)} services (Took {round_trip})"
         )
+        database.add_metric(
+            {
+                "postcode": postcode,
+                "search_distance": search_distance,
+                "service_types": service_types,
+                "number_per_type": number_per_type,
+                "gp": gp,
+                "search_role": search_role,
+                "total_time": float("{0:.2f}".format(round_trip)),
+            }
+        )
 
         for service in services:
 
