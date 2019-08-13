@@ -216,9 +216,9 @@ def snapshot_service_search(probe):
         database.add_metric(
             {
                 "postcode": postcode,
-                "search_distance": search_distance,
+                "search_distance": int(search_distance),
                 "service_types": service_types,
-                "number_per_type": number_per_type,
+                "number_per_type": int(number_per_type),
                 "gp": gp,
                 "search_role": search_role,
                 "total_time": float("{0:.2f}".format(round_trip)),
