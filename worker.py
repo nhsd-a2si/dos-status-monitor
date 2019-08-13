@@ -1,11 +1,5 @@
 import redis
 from rq import Worker, Queue, Connection
-from dos_status_monitor import config
-from raven import Client
-from raven.transport.http import HTTPTransport
-# from rq.contrib.sentry import register_sentry
-
-client = Client(config.SENTRY_DSN, transport=HTTPTransport)
 
 from dos_status_monitor import config
 
@@ -19,5 +13,4 @@ if __name__ == "__main__":
         import pymongo
 
         worker = Worker(map(Queue, listen))
-        # register_sentry(client, worker)
         worker.work()

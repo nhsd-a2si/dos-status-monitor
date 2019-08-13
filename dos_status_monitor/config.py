@@ -47,5 +47,3 @@ BASIC_AUTH_PASSWORD = os.environ.get("BASIC_AUTH_PASSWORD", "pass")
 BASIC_AUTH_FORCE = config_string_to_bool(os.environ.get("BASIC_AUTH_FORCE", "True"))
 
 GOOGLE_MAPS_API_KEY = os.environ.get("GOOGLE_MAPS_API_KEY", "")
-
-SENTRY_DSN = os.environ.get("SENTRY_DSN", "")
