@@ -24,3 +24,10 @@ v0.4
 ----
 * Fix a bug with services using Digital Referral roles
 * Improved error handling for database quota errors
+
+v0.5
+----
+* Removed Sentry integration
+* Stores search timings into a metrics collection
+* Add Black to development toolchain
+* Uplift Python runtime version
