@@ -41,7 +41,7 @@ def update_status(document):
         r = statuses.update_one(query, update, upsert=True)
         logger.debug(f"Updated status for {document['id']}")
         return r
-    except:
+    except Exception as e:
         logger.error(f"Failed to update status for {document['id']}")
         raise
 

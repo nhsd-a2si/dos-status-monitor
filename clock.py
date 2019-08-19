@@ -86,7 +86,7 @@ add_housekeeping_jobs()
 schedule.every(config.CHECK_RATE_MINUTES).minutes.do(add_search_jobs)
 schedule.every(config.CHECK_RATE_MINUTES).minutes.do(add_service_jobs)
 schedule.every(config.STATUS_UPDATE_RATE_MINUTES).minutes.do(add_service_status_job)
-schedule.every(5).minutes.do(add_housekeeping_jobs)
+# schedule.every(5).minutes.do(add_housekeeping_jobs)
 
 while True:
     logger.info(f"Tick!")
