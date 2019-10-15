@@ -1,7 +1,7 @@
 from dos_status_monitor import config
 from pymongo import MongoClient
 from datetime import datetime
-import pprint
+from datetime import date
 
 from dos_status_monitor import logger
 
@@ -13,21 +13,11 @@ snapshots = db["snapshots"]
 
 
 # Get week's worth of snapshots
-def get_old_snapshots():
-    logger.debug(f"Getting previous snapshots")
-    query = {"snapshotTime": {"$lt": datetime.now()}}
-    results = snapshots.find(query).limit(1)
-    try:
-        for result in results:
-            pprint.pprint(result)
-
-    except TypeError:
-        logger.debug(f"No snapshots found")
-        return None
-
-
-# TODO: Save snapshots to temporary CSV
-
-# TODO: Upload CSV to S3
-
-# TODO: Delete exported snapshots
+def delete_old_snapshots():
+    logger.debug(f"Deleting old snapshots")
+    query = {
+        "snapshotTime": {"$lt": datetime.combine(date.today(), datetime.min.time())}
+    }
+    count = snapshots.count_documents(filter=query)
+    results = snapshots.delete_many(filter=query)
+    print(f"Counted {count}. Deleted {results.deleted_count}")

@@ -73,8 +73,8 @@ def add_service_status_job():
 
 def add_housekeeping_jobs():
 
-    q.enqueue(housekeeping.get_old_snapshots)
-    logger.info(f"Housekeeping jobs configured to run every 5 minutes.")
+    q.enqueue(housekeeping.delete_old_snapshots)
+    logger.debug("Added housekeeping jobs to queue")
 
 
 add_search_jobs()
@@ -86,7 +86,7 @@ add_housekeeping_jobs()
 schedule.every(config.CHECK_RATE_MINUTES).minutes.do(add_search_jobs)
 schedule.every(config.CHECK_RATE_MINUTES).minutes.do(add_service_jobs)
 schedule.every(config.STATUS_UPDATE_RATE_MINUTES).minutes.do(add_service_status_job)
-# schedule.every(5).minutes.do(add_housekeeping_jobs)
+schedule.every(1).day.at("23:30:00").do(add_housekeeping_jobs)
 
 while True:
     logger.info(f"Tick!")
