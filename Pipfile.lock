@@ -272,9 +272,10 @@
         },
         "twilio": {
             "hashes": [
-                "sha256:7c6329118583852bb06a2065dd2987a012310e5dfd834ef821d736b059bd1c74"
+                "sha256:3c02ed1855629e3b567b613c03dfad2aade913f21897d21cd0efe6e48f06ddcf",
+                "sha256:8d6fb07d42235ec60d6256c0f438f6274f601d688e550d25124a0067c4daf75c"
             ],
-            "version": "==6.41.0"
+            "version": "==7.16.0"
         },
         "typing-extensions": {
             "hashes": [
