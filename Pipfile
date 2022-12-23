@@ -25,7 +25,7 @@ raven = "*"
 dnspython = "*"
 
 [requires]
-python_version = "3.7.4"
+python_version = "3.9.16"
 
 [pipenv]
 allow_prereleases = true
