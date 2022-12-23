@@ -242,10 +242,10 @@
         },
         "rq": {
             "hashes": [
-                "sha256:ef61f4517a1dc499b57bc0fa9e8a8f1c561e1f72abab936dbe9081a4508f8874",
-                "sha256:f680c52c7079266465d5e5c49679fab0d14db11d70fec6f1470423408b6bbcf6"
+                "sha256:31c07e55255bdc05c804902d4e15779185603b04b9161b43c3e7bcac84b3343b",
+                "sha256:433882bde50ac462eb489dc1ffa476209c42b284d0031270631da26363923702"
             ],
-            "version": "==1.4.2"
+            "version": "==1.11.1"
         },
         "schedule": {
             "hashes": [
